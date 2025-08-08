@@ -523,13 +523,13 @@ class CGMOrderManager {
         orderDetails.innerHTML = `
             <strong>Order Details:</strong><br>
             <strong>Name:</strong> ${orderData.name}<br>
+            ${orderData.guardianName ? `<strong>Parent/Guardian:</strong> ${orderData.guardianName}<br>` : ''}
             <strong>Phone:</strong> ${orderData.phone}<br>
             <strong>Sensor:</strong> ${sensorType}<br>
             <strong>Quantity:</strong> ${orderData.quantity}<br>
             <strong>Total Amount:</strong> ₹${orderData.totalAmount.toLocaleString()}<br>
             <strong>Pickup:</strong> ${pickupLocation}<br>
             ${orderData.notes ? `<strong>Notes:</strong> ${orderData.notes}<br>` : ''}
-            ${orderData.emergencyContact ? `<strong>Emergency Contact:</strong> ${orderData.emergencyContact}` : ''}
         `;
         
         modal.style.display = 'block';
@@ -605,6 +605,7 @@ class CGMOrderManager {
                     </div>
                     <div class="order-details">
                         ${sensorType} - ${order.quantity} quantity<br>
+                        ${order.guardianName ? `Parent/Guardian: ${order.guardianName}<br>` : ''}
                         Amount: ₹${(order.totalAmount || (order.quantity * CONFIG.SENSORS[order.sensorType]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price)).toLocaleString()}<br>
                         ${placedAt ? `Placed: ${placedAt}<br>` : ''}
                         Pickup: ${pickupLocation}

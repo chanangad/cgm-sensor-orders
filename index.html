@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock up on sensors – Diabuddies of Karnataka</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -38,6 +38,10 @@
                         <div class="form-group">
                             <label for="name">Full Name *</label>
                             <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guardianName">Parent/Guardian Name (Optional)</label>
+                            <input type="text" id="guardianName" name="guardianName" placeholder="If ordering for a child, enter parent/guardian name">
                         </div>
 
                         <div class="form-group">
@@ -112,15 +116,9 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="notes">Additional Notes</label>
-                            <textarea id="notes" name="notes" rows="3" placeholder="Any special requirements, timing preferences, or other notes..."></textarea>
-                        </div>
+                        
 
-                        <div class="form-group">
-                            <label for="emergencyContact">Emergency Contact (Optional)</label>
-                            <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Name and phone number">
-                        </div>
+                        
 
                         <button type="button" class="submit-btn" onclick="window.cgmOrderManager.handleFormSubmit(event)">
                             <i class="fas fa-paper-plane"></i> Submit Order
@@ -181,7 +179,7 @@
         </footer>
     </div>
 
-    <script src="config.js"></script>
-    <script src="script.js"></script>
+    <script src="config.js?v=3"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html> 
