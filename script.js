@@ -595,16 +595,18 @@ class CGMOrderManager {
             const sensorType = this.getSensorTypeName(order.sensorType);
             const pickupLocation = this.getPickupLocationName(order.pickupLocation);
             const timeAgo = this.getTimeAgo(new Date(order.timestamp));
+            const placedAt = order.formattedTime || (order.timestamp ? new Date(order.timestamp).toLocaleString() : '');
             
             return `
                 <div class="order-item">
                     <div class="order-item-header">
                         <span class="order-name">${order.name}</span>
-                        <span class="order-time">${timeAgo}</span>
+                        <span class="order-time">${timeAgo}${placedAt ? ` · ${placedAt}` : ''}</span>
                     </div>
                     <div class="order-details">
                         ${sensorType} - ${order.quantity} quantity<br>
                         Amount: ₹${(order.totalAmount || (order.quantity * CONFIG.SENSORS[order.sensorType]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price)).toLocaleString()}<br>
+                        ${placedAt ? `Placed: ${placedAt}<br>` : ''}
                         Pickup: ${pickupLocation}
                         ${order.notes ? `<br>Notes: ${order.notes}` : ''}
                     </div>
