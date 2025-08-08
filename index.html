@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock up on sensors – Diabuddies of Karnataka</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-droplet"></i> Stock up on sensors</h1>
+                <p class="subtitle">Diabuddies of Karnataka</p>
+                <div class="order-toggle" id="orderToggleContainer" style="display: none;">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="orderToggle" checked>
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">Accepting Orders</span>
+                    </label>
+                </div>
+                <div class="admin-login">
+                    <button type="button" id="adminLoginBtn" class="admin-btn">
+                        <i class="fas fa-cog"></i> Admin
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Order Form Section -->
+            <section class="order-form-section">
+                <div class="form-container">
+                    <h2><i class="fas fa-plus-circle"></i> Place Your Order</h2>
+                    <form id="orderForm" class="order-form">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Mobile Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sensorType">Sensor Type *</label>
+                            <select id="sensorType" name="sensorType" required>
+                                <option value="">Select sensor type</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity *</label>
+                            <input type="number" id="quantity" name="quantity" min="1" max="10" required>
+                        </div>
+
+                        <!-- Payment Section -->
+                        <div id="paymentSection" class="payment-section" style="display: none;">
+                            <h3><i class="fas fa-credit-card"></i> Payment Details</h3>
+                            
+                            <div class="total-amount">
+                                <div class="amount-display">
+                                    <span class="amount-label">Total Amount Due:</span>
+                                    <span class="amount-value" id="totalAmount">₹0</span>
+                                </div>
+                            </div>
+
+                            <div class="upi-details">
+                                <div class="upi-info">
+                                    <h4><i class="fas fa-mobile-alt"></i> UPI Payment</h4>
+                                    <div class="upi-id">
+                                        <span class="upi-label">UPI ID:</span>
+                                        <span class="upi-value">chanangad-1@okicici</span>
+                                        <button type="button" class="copy-btn" onclick="copyUPI()">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="qr-section">
+                                    <h4><i class="fas fa-qrcode"></i> Scan QR Code</h4>
+                                    <div class="qr-container">
+                                        <img src="scan.png" alt="UPI QR Code" class="qr-code">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-instructions">
+                                <h4><i class="fas fa-info-circle"></i> Payment Instructions</h4>
+                                <ol>
+                                    <li>Pay the exact amount shown above using UPI</li>
+                                    <li>Take a screenshot of the payment confirmation</li>
+                                    <li>Upload the screenshot below</li>
+                                    <li>Complete your order</li>
+                                </ol>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="paymentScreenshot">Payment Screenshot *</label>
+                                <input type="file" id="paymentScreenshot" name="paymentScreenshot" accept="image/*" required>
+                                <small>Upload screenshot of your UPI payment confirmation</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pickupLocation">Preferred Pickup Location *</label>
+                            <select id="pickupLocation" name="pickupLocation" required>
+                                <option value="">Select pickup location</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Additional Notes</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Any special requirements, timing preferences, or other notes..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergencyContact">Emergency Contact (Optional)</label>
+                            <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Name and phone number">
+                        </div>
+
+                        <button type="button" class="submit-btn" onclick="window.cgmOrderManager.handleFormSubmit(event)">
+                            <i class="fas fa-paper-plane"></i> Submit Order
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Order Summary Section -->
+            <section class="order-summary-section">
+                <div class="summary-container">
+                    <h2><i class="fas fa-chart-bar"></i> Order Summary</h2>
+                    <div class="summary-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label">Total Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSensors">0</div>
+                            <div class="stat-label">Total Sensors</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="lastOrderTime">-</div>
+                            <div class="stat-label">Last Order</div>
+                        </div>
+
+                    </div>
+
+                    <div class="orders-list">
+                        <h3>Recent Orders</h3>
+                        <div id="ordersList" class="orders-container">
+                            <div class="no-orders">No orders yet. Be the first to order!</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3>Order Placed!</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Thank you for your order. We'll contact you when the sensors arrive.</p>
+                    <div class="order-details" id="orderDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModal" class="btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 CGM Community Group. Made with ❤️ for our diabetes community.</p>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
