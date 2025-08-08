@@ -4,7 +4,7 @@
 const CONFIG = {
     
     // Google Apps Script URL - update this when you set up Google Drive
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyM5x177G4ux7La1VUMkRj8ypXXCePYs5Pxrk7-3Ln0-iDSFaYObNGftIUG1hg8KSNu/exec',
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwuX68cZfPSmifg3hsG29UGxCBW5oSx_J12WnTyWtwDBY28OATGTMKPH4IpMRNfMQOW/exec',
     
     // UPI ID
     UPI_ID: 'chanangad-1@okicici',
