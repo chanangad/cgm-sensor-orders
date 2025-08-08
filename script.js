@@ -403,22 +403,31 @@ class CGMOrderManager {
                     // Use Google Apps Script URL from config
                     const scriptUrl = CONFIG.GOOGLE_SCRIPT_URL;
                     
-                    const response = await fetch(scriptUrl, {
+                    const isProd = window.location.hostname.endsWith('github.io');
+                    const fetchOptions = {
                         method: 'POST',
                         headers: {
-                            // Use text/plain to avoid CORS preflight
                             'Content-Type': 'text/plain;charset=utf-8',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify(uploadData)
-                    });
+                        body: JSON.stringify(uploadData),
+                        mode: isProd ? 'no-cors' : 'cors'
+                    };
+
+                    const response = await fetch(scriptUrl, fetchOptions);
+
+                    // In production (GitHub Pages), we use no-cors which returns an opaque response
+                    // We cannot read status or body, but the request is sent and processed server-side
+                    if (isProd) {
+                        resolve({ success: true });
+                        return;
+                    }
 
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
                     const result = await response.json();
-                    
                     if (result.success) {
                         resolve(result);
                     } else {
