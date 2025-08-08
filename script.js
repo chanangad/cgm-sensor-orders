@@ -393,6 +393,7 @@ class CGMOrderManager {
                     
                     // Prepare data for Google Apps Script
                     const uploadData = {
+                        action: 'submitOrder',
                         screenshot: base64Data,
                         filename: file && file.name ? file.name : `order_${orderData.name}_${Date.now()}.png`,
                         mimeType: file && file.type ? file.type : 'image/png',
@@ -474,8 +475,15 @@ class CGMOrderManager {
         if (paymentScreenshot && paymentScreenshot.files.length > 0) {
             try {
                 const uploadResult = await this.uploadToGoogleDrive(paymentScreenshot.files[0], orderData);
-                if (uploadResult && uploadResult.fileUrl) {
-                    orderData.paymentProofUrl = uploadResult.fileUrl;
+                // Support both plain upload and submitOrder response shapes
+                if (uploadResult) {
+                    const directUrl = uploadResult.fileUrl;
+                    const nestedUrl = uploadResult.upload && uploadResult.upload.fileUrl;
+                    orderData.paymentProofUrl = directUrl || nestedUrl || '';
+                    // Optional: warn if sheet append failed
+                    if (uploadResult.sheet && uploadResult.sheet.ok === false) {
+                        console.warn('Sheets append failed:', uploadResult.sheet.error);
+                    }
                 }
                 console.log('Upload successful:', uploadResult);
             } catch (error) {
