@@ -164,6 +164,7 @@ class CGMOrderManager {
         if (!el && (!inlineEls || inlineEls.length === 0)) return;
         // Read from optional CONFIG.DELIVERY_CYCLE or fallback to current month name + year
         const configured = (typeof CONFIG !== 'undefined' && CONFIG.DELIVERY_CYCLE) ? String(CONFIG.DELIVERY_CYCLE).trim() : '';
+        const nextRunDate = (typeof CONFIG !== 'undefined' && CONFIG.NEXT_RUN_DATE) ? String(CONFIG.NEXT_RUN_DATE).trim() : '';
         let label = configured;
         if (!label) {
             const now = new Date();
@@ -172,7 +173,8 @@ class CGMOrderManager {
             label = `(${month} ${year})`;
         }
         if (el) el.textContent = ` ${label}`;
-        inlineEls.forEach(n => { n.textContent = label; });
+        const dateText = nextRunDate ? `${nextRunDate} ${label} (tentative)` : `${label}`;
+        inlineEls.forEach(n => { n.textContent = dateText; });
     }
 
     async fetchOrderStatus() {
