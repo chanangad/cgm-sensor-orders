@@ -163,6 +163,8 @@ class CGMOrderManager {
     applyDeliveryCycleLabel() {
         const el = document.getElementById('deliveryCycle');
         const inlineEls = document.querySelectorAll('.deliveryCycleInline');
+        const infoEls = document.querySelectorAll('.deliveryCycleInlineInfo');
+        const ordersCloseEl = document.getElementById('ordersCloseInline');
         if (!el && (!inlineEls || inlineEls.length === 0)) return;
         // Read from optional CONFIG.DELIVERY_CYCLE or fallback to current month name + year
         const configured = (typeof CONFIG !== 'undefined' && CONFIG.DELIVERY_CYCLE) ? String(CONFIG.DELIVERY_CYCLE).trim() : '';
@@ -176,7 +178,13 @@ class CGMOrderManager {
         }
         if (el) el.textContent = ` ${label}`;
         const dateText = nextRunDate ? `${nextRunDate} ${label} (tentative)` : `${label}`;
+        // Header uses NEXT_RUN_DATE + DELIVERY_CYCLE; info section should only show DELIVERY_CYCLE
         inlineEls.forEach(n => { n.textContent = dateText; });
+        infoEls.forEach(n => { n.textContent = label; });
+        if (ordersCloseEl) {
+            const closeLabel = (typeof CONFIG !== 'undefined' && CONFIG.ORDER_CLOSES_DATE && String(CONFIG.ORDER_CLOSES_DATE).trim()) ? String(CONFIG.ORDER_CLOSES_DATE).trim() : '';
+            ordersCloseEl.textContent = closeLabel || 'TBA';
+        }
     }
 
     async fetchOrderStatus() {

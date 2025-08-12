@@ -4,10 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'September 2025',
+    DELIVERY_CYCLE: 'September \'25',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
     NEXT_RUN_DATE: '14th',
+
+    // Optional: show an "orders close" date under the header meta
+    // Example: '7th September 2025'
+    ORDER_CLOSES_DATE: '27th August \'25',
 
     // Show recent orders from Google Sheets instead of local browser cache
     USE_SERVER_ORDERS: true,
