@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CGM Sensor Pre‑Order – Diabuddies of Karnataka</title>
-    <link rel="stylesheet" href="styles.css?v=5">
+    <link rel="stylesheet" href="styles.css?v=6">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,27 +12,32 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1>CGM Sensor Pre‑Order</h1>
-                <p class="subtitle">Diabuddies of Karnataka</p>
-                <div class="header-meta">
-                    <i class="fas fa-calendar"></i>
-                    Next Run: <span class="deliveryCycleInline"></span>
+                <div class="header-logo">
+                    <img src="title-mark.png" alt="Diabuddies of Karnataka Logo" class="logo-image">
                 </div>
-                <div class="header-meta">
-                    <i class="fas fa-hourglass-half"></i>
-                    Orders close: <span id="ordersCloseInline"></span>
-                </div>
-                <div class="order-toggle" id="orderToggleContainer" style="display: none;">
-                    <label class="toggle-label">
-                        <input type="checkbox" id="orderToggle" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-text">Accepting Orders</span>
-                    </label>
-                </div>
-                <div class="admin-login">
-                    <button type="button" id="adminLoginBtn" class="admin-btn">
-                        <i class="fas fa-cog"></i> Admin
-                    </button>
+                <div class="header-main">
+                    <h1>CGM Sensor Pre‑Order</h1>
+                    <p class="subtitle">Diabuddies of Karnataka</p>
+                    <div class="header-meta">
+                        <i class="fas fa-calendar"></i>
+                        Next Run: <span class="deliveryCycleInline"></span>
+                    </div>
+                    <div class="header-meta">
+                        <i class="fas fa-hourglass-half"></i>
+                        Orders close: <span id="ordersCloseInline"></span>
+                    </div>
+                    <div class="order-toggle" id="orderToggleContainer" style="display: none;">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="orderToggle" checked>
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Accepting Orders</span>
+                        </label>
+                    </div>
+                    <div class="admin-login">
+                        <button type="button" id="adminLoginBtn" class="admin-btn">
+                            <i class="fas fa-cog"></i> Admin
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -47,7 +52,7 @@
                         upcoming Type One Run scheduled in <strong><span class="deliveryCycleInlineInfo"></span></strong>.
                     </p>
                     <p>
-                        This form typically opens every 2–3 months. Please order accordingly — it’s advisable to stock up
+                        This form typically opens every 2–3 months. Please order accordingly — it's advisable to stock up
                         for the next 2–3 months based on your usage.
                     </p>
                     <p>
@@ -55,9 +60,9 @@
                         community can benefit from slightly better prices. We do not make any profit from this.
                     </p>
                     <p>
-                        Shipping sensors outside the city isn’t possible as it’s not sustainable for the coordinators.
-                        For any faulty sensors, we won’t be responsible — please reach out to the respective
-                        company’s support for replacements under their policy.
+                        Shipping sensors outside the city isn't possible as it's not sustainable for the coordinators.
+                        For any faulty sensors, we won't be responsible — please reach out to the respective
+                        company's support for replacements under their policy.
                     </p>
                     <p>
                         Orders can be collected in person only during the Type One Run event for
@@ -137,7 +142,7 @@
                             <div class="payment-instructions">
                                 <h4><i class="fas fa-info-circle"></i> Payment Instructions</h4>
                                 <ol>
-                                    <li>Pay the “Total Amount Due” shown above using UPI</li>
+                                    <li>Pay the "Total Amount Due" shown above using UPI</li>
                                     <li>Take a screenshot of the payment confirmation</li>
                                     <li>Upload the screenshot below</li>
                                     <li>Complete your order</li>
@@ -157,10 +162,6 @@
                                 <option value="">Select pickup location</option>
                             </select>
                         </div>
-
-                        
-
-                        
 
                         <button type="button" class="submit-btn" onclick="window.cgmOrderManager.handleFormSubmit(event)">
                             <i class="fas fa-paper-plane"></i> Submit Order
@@ -224,4 +225,4 @@
     <script src="config.js?v=5"></script>
     <script src="script.js?v=5"></script>
 </body>
-</html> 
+</html>
