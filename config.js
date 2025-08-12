@@ -10,12 +10,12 @@ const CONFIG = {
     NEXT_RUN_DATE: '14th',
 
     // Show recent orders from Google Sheets instead of local browser cache
-    USE_SERVER_ORDERS: false,
+    USE_SERVER_ORDERS: true,
     // How many recent orders to fetch when USE_SERVER_ORDERS is true
     ORDERS_FETCH_LIMIT: 10,
     
     // Google Apps Script URL - update this when you set up Google Drive
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwuX68cZfPSmifg3hsG29UGxCBW5oSx_J12WnTyWtwDBY28OATGTMKPH4IpMRNfMQOW/exec',
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbznvJRP-LkLH1FnY_bH0k-7YA2WepkfBhb5yGMMKWxBvQs3K-adMZE1EuOMcQiLcARC/exec',
     
     // UPI ID
     UPI_ID: 'chanangad-1@okicici',

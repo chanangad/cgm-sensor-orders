@@ -13,6 +13,8 @@ class CGMOrderManager {
         this.setupEventListeners();
         this.updateSummary();
         this.renderOrders();
+        this.maybeFetchServerOrders();
+        this.maybeFetchServerSummary();
         this.applyDeliveryCycleLabel();
     }
 
@@ -656,18 +658,140 @@ class CGMOrderManager {
                         <span class="order-time">${timeAgo}${placedAt ? ` · ${placedAt}` : ''}</span>
                     </div>
                     <div class="order-details">
-                        ${sensorType} - ${order.quantity} quantity<br>
-                        ${order.guardianName ? `Parent/Guardian: ${order.guardianName}<br>` : ''}
-                        Amount: ₹${(order.totalAmount || (order.quantity * CONFIG.SENSORS[order.sensorType]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price)).toLocaleString()}<br>
-                        ${placedAt ? `Placed: ${placedAt}<br>` : ''}
-                        Pickup: ${pickupLocation}
-                        ${order.notes ? `<br>Notes: ${order.notes}` : ''}
+                        ${sensorType} - ${order.quantity} quantity
                     </div>
                 </div>
             `;
         }).join('');
         
         ordersContainer.innerHTML = ordersHTML;
+    }
+
+    async maybeFetchServerOrders() {
+        if (!CONFIG.USE_SERVER_ORDERS) return;
+        const isProd = window.location.hostname.endsWith('github.io');
+        if (isProd) {
+            this.fetchRecentOrdersJsonp(CONFIG.ORDERS_FETCH_LIMIT || 10);
+            return;
+        }
+        try {
+            const resp = await this.postToScript({ action: 'getRecentOrders', limit: CONFIG.ORDERS_FETCH_LIMIT || 10 });
+            if (resp && resp.success && Array.isArray(resp.orders)) {
+                const mapped = resp.orders.map(o => ({
+                    name: o.name,
+                    guardianName: o.guardianName || '',
+                    phone: o.phone || '',
+                    sensorType: o.sensorType || CONFIG.DEFAULT_SENSOR,
+                    quantity: Number(o.quantity || 0),
+                    pickupLocation: o.pickupLocation || 'cubbon-park',
+                    totalAmount: Number(o.totalAmount || 0),
+                    timestamp: o.timestamp ? new Date(o.timestamp).toISOString() : new Date().toISOString(),
+                }));
+                this.renderServerOrders(mapped);
+            }
+        } catch (_) {}
+    }
+
+    renderServerOrders(serverOrders) {
+        const ordersContainer = document.getElementById('ordersList');
+        if (!ordersContainer) return;
+        if (!serverOrders || serverOrders.length === 0) return;
+        const html = serverOrders.slice(0, CONFIG.ORDERS_FETCH_LIMIT || 10).map(order => {
+            const sensorType = this.getSensorTypeName(order.sensorType);
+            const placedAt = order.timestamp ? new Date(order.timestamp).toLocaleString() : '';
+            return `
+                <div class="order-item">
+                    <div class="order-item-header">
+                        <span class="order-name">${order.name}</span>
+                        <span class="order-time">${placedAt}</span>
+                    </div>
+                    <div class="order-details">
+                        ${sensorType} - ${order.quantity} quantity
+                    </div>
+                </div>
+            `;
+        }).join('');
+        ordersContainer.innerHTML = html;
+    }
+
+    fetchRecentOrdersJsonp(limit) {
+        const cbName = `__orders_cb_${Date.now()}`;
+        const cleanup = () => {
+            try { delete window[cbName]; } catch (_) {}
+            if (script && script.parentNode) script.parentNode.removeChild(script);
+        };
+        window[cbName] = (data) => {
+            try {
+                if (data && data.success && Array.isArray(data.orders)) {
+                    const mapped = data.orders.map(o => ({
+                        name: o.name,
+                        guardianName: o.guardianName || '',
+                        phone: o.phone || '',
+                        sensorType: o.sensorType || CONFIG.DEFAULT_SENSOR,
+                        quantity: Number(o.quantity || 0),
+                        pickupLocation: o.pickupLocation || 'cubbon-park',
+                        totalAmount: Number(o.totalAmount || 0),
+                        timestamp: o.timestamp ? new Date(o.timestamp).toISOString() : new Date().toISOString(),
+                    }));
+                    this.renderServerOrders(mapped);
+                }
+            } finally {
+                cleanup();
+            }
+        };
+        const script = document.createElement('script');
+        const url = `${CONFIG.GOOGLE_SCRIPT_URL}?action=getRecentOrders&limit=${encodeURIComponent(limit)}&callback=${encodeURIComponent(cbName)}`;
+        script.src = url;
+        script.onerror = cleanup;
+        document.body.appendChild(script);
+        // Safety timeout cleanup
+        setTimeout(cleanup, 8000);
+    }
+
+    async maybeFetchServerSummary() {
+        if (!CONFIG.USE_SERVER_ORDERS) return;
+        const isProd = window.location.hostname.endsWith('github.io');
+        if (isProd) {
+            this.fetchSummaryJsonp();
+            return;
+        }
+        try {
+            const resp = await this.postToScript({ action: 'getSummary' });
+            if (resp && resp.success) this.applyServerSummary(resp);
+        } catch (_) {}
+    }
+
+    applyServerSummary(summary) {
+        const totalOrdersEl = document.getElementById('totalOrders');
+        const totalSensorsEl = document.getElementById('totalSensors');
+        const lastOrderTimeEl = document.getElementById('lastOrderTime');
+        if (typeof summary.totalOrders === 'number' && totalOrdersEl) totalOrdersEl.textContent = summary.totalOrders;
+        if (typeof summary.totalSensors === 'number' && totalSensorsEl) totalSensorsEl.textContent = summary.totalSensors;
+        if (summary.lastOrderTimestamp && lastOrderTimeEl) {
+            const d = new Date(summary.lastOrderTimestamp);
+            lastOrderTimeEl.textContent = this.getTimeAgo(d);
+        }
+    }
+
+    fetchSummaryJsonp() {
+        const cbName = `__summary_cb_${Date.now()}`;
+        const cleanup = () => {
+            try { delete window[cbName]; } catch (_) {}
+            if (script && script.parentNode) script.parentNode.removeChild(script);
+        };
+        window[cbName] = (data) => {
+            try {
+                if (data && data.success) this.applyServerSummary(data);
+            } finally {
+                cleanup();
+            }
+        };
+        const script = document.createElement('script');
+        const url = `${CONFIG.GOOGLE_SCRIPT_URL}?action=getSummary&callback=${encodeURIComponent(cbName)}`;
+        script.src = url;
+        script.onerror = cleanup;
+        document.body.appendChild(script);
+        setTimeout(cleanup, 8000);
     }
 
     getTimeAgo(date) {
