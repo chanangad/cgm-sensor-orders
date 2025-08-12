@@ -241,6 +241,15 @@ class CGMOrderManager {
       }
     }
 
+    if (field.type === "email" && value) {
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(value)) {
+        this.showFieldError(field, "Please enter a valid email address")
+        return false
+      }
+    }
+
     if (field.type === "number" && value) {
       const num = Number.parseInt(value)
       if (num < 1 || num > 10) {
@@ -528,6 +537,16 @@ class CGMOrderManager {
       return
     }
 
+    // Compute values that the server may include in confirmation email
+    // Calculate total amount (before upload so server receives it)
+    const quantityPre = Number.parseInt(orderData.quantity) || 0
+    const selectedSensorPre = orderData.sensorType || CONFIG.DEFAULT_SENSOR
+    const sensorPricePre = CONFIG.SENSORS[selectedSensorPre]?.price || 0
+    orderData.totalAmount = quantityPre * sensorPricePre
+    // Pass run timing info from config so server can include it in the email
+    orderData.nextRunDate = CONFIG.NEXT_RUN_DATE || ''
+    orderData.deliveryCycle = CONFIG.DELIVERY_CYCLE || ''
+
     // Upload screenshot to Google Drive (mandatory)
     if (paymentScreenshot && paymentScreenshot.files.length > 0) {
       try {
@@ -550,7 +569,7 @@ class CGMOrderManager {
       }
     }
 
-    // Calculate total amount
+    // totalAmount already computed above for server; recompute for safety on client UI
     const quantity = Number.parseInt(orderData.quantity) || 0
     const sensorPrice = CONFIG.SENSORS[orderData.sensorType]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price
     orderData.totalAmount = quantity * sensorPrice
