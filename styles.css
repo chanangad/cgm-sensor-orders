@@ -13,6 +13,67 @@ body {
     min-height: 100vh;
 }
 
+/* Info Section (single column, not affected by form disabled state) */
+.info-section {
+    margin-bottom: 2rem;
+}
+
+.info-container {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.delivery-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #e6fffa;
+    color: #065f46;
+    border: 1px solid #99f6e4;
+    border-radius: 9999px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.delivery-banner--header {
+    margin-bottom: 0;
+}
+
+.delivery-banner .label {
+    color: #047857;
+}
+
+.delivery-banner .value {
+    color: #0f766e;
+}
+
+.info-container h2 {
+    color: #2d3748;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-container h2 i {
+    color: #4299e1;
+}
+
+.info-content p {
+    color: #334155;
+    margin-bottom: 0.75rem;
+}
+
+.info-content p:last-child {
+    margin-bottom: 0;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -32,6 +93,25 @@ body {
 
 .header-content {
     text-align: center;
+}
+
+.header-delivery-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
+.header-meta {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-meta i {
+    color: #94a3b8;
 }
 
 .header h1 {
@@ -173,6 +253,24 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.form-intro {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.form-intro p {
+    margin-bottom: 0.75rem;
+}
+
+.form-intro p:last-child {
+    margin-bottom: 0;
 }
 
 .form-container h2 i {
@@ -483,6 +581,12 @@ body {
     border-radius: 12px;
     margin-bottom: 1.5rem;
     text-align: center;
+}
+
+.savings-line {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #065f46;
 }
 
 .amount-display {

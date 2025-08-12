@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock up on sensors – Diabuddies of Karnataka</title>
+    <title>CGM Sensor Pre‑Order – Diabuddies of Karnataka</title>
     <link rel="stylesheet" href="styles.css?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,8 +12,12 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1><i class="fas fa-droplet"></i> Stock up on sensors</h1>
+                <h1>CGM Sensor Pre‑Order</h1>
                 <p class="subtitle">Diabuddies of Karnataka</p>
+                <div class="header-meta">
+                    <i class="fas fa-calendar"></i>
+                    Pickup at Type One Run: <span class="deliveryCycleInline"></span>
+                </div>
                 <div class="order-toggle" id="orderToggleContainer" style="display: none;">
                     <label class="toggle-label">
                         <input type="checkbox" id="orderToggle" checked>
@@ -28,6 +32,37 @@
                 </div>
             </div>
         </header>
+        
+        <!-- Information Section (single column) -->
+        <section class="info-section">
+            <div class="info-container">
+                <h2><i class="fas fa-info-circle"></i> Please read before ordering</h2>
+                <div class="info-content">
+                    <p>
+                        The sensors can be pre‑ordered by filling this form and can be collected during the
+                        upcoming Type One Run scheduled in <strong><span class="deliveryCycleInline"></span></strong>.
+                    </p>
+                    <p>
+                        This form typically opens every 2–3 months. Please order accordingly — it’s advisable to stock up
+                        for the next 2–3 months based on your usage.
+                    </p>
+                    <p>
+                        This is a community service run by volunteers of <em>Diabuddies of Karnataka</em> so that our T1D
+                        community can benefit from slightly better prices. We do not make any profit from this.
+                    </p>
+                    <p>
+                        Shipping sensors outside the city isn’t possible as it’s not sustainable for the coordinators.
+                        For any faulty sensors, we won’t be responsible — please reach out to the respective
+                        company’s support for replacements under their policy.
+                    </p>
+                    <p>
+                        Orders can be collected in person only during the Type One Run event for
+                        <strong><span class="deliveryCycleInline"></span></strong>. For updates and details, please check the
+                        Diabuddies of Karnataka WhatsApp group.
+                    </p>
+                </div>
+            </div>
+        </section>
 
         <main class="main-content">
             <!-- Order Form Section -->
@@ -70,6 +105,9 @@
                                     <span class="amount-label">Total Amount Due:</span>
                                     <span class="amount-value" id="totalAmount">₹0</span>
                                 </div>
+                                <div class="savings-line" id="savingsLine" style="display:none">
+                                    You save: <strong id="savingsValue">₹0</strong>
+                                </div>
                             </div>
 
                             <div class="upi-details">
@@ -95,7 +133,7 @@
                             <div class="payment-instructions">
                                 <h4><i class="fas fa-info-circle"></i> Payment Instructions</h4>
                                 <ol>
-                                    <li>Pay the exact amount shown above using UPI</li>
+                                    <li>Pay the “Total Amount Due” shown above using UPI</li>
                                     <li>Take a screenshot of the payment confirmation</li>
                                     <li>Upload the screenshot below</li>
                                     <li>Complete your order</li>

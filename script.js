@@ -13,6 +13,7 @@ class CGMOrderManager {
         this.setupEventListeners();
         this.updateSummary();
         this.renderOrders();
+        this.applyDeliveryCycleLabel();
     }
 
     setupEventListeners() {
@@ -157,6 +158,23 @@ class CGMOrderManager {
         }
     }
 
+    applyDeliveryCycleLabel() {
+        const el = document.getElementById('deliveryCycle');
+        const inlineEls = document.querySelectorAll('.deliveryCycleInline');
+        if (!el && (!inlineEls || inlineEls.length === 0)) return;
+        // Read from optional CONFIG.DELIVERY_CYCLE or fallback to current month name + year
+        const configured = (typeof CONFIG !== 'undefined' && CONFIG.DELIVERY_CYCLE) ? String(CONFIG.DELIVERY_CYCLE).trim() : '';
+        let label = configured;
+        if (!label) {
+            const now = new Date();
+            const month = now.toLocaleString('en-US', { month: 'long' });
+            const year = now.getFullYear();
+            label = `(${month} ${year})`;
+        }
+        if (el) el.textContent = ` ${label}`;
+        inlineEls.forEach(n => { n.textContent = label; });
+    }
+
     async fetchOrderStatus() {
         try {
             const resp = await this.postToScript({ action: 'getStatus' });
@@ -288,15 +306,26 @@ class CGMOrderManager {
         const quantityInput = document.getElementById('quantity');
         const paymentSection = document.getElementById('paymentSection');
         const totalAmountElement = document.getElementById('totalAmount');
+        const savingsLine = document.getElementById('savingsLine');
+        const savingsValue = document.getElementById('savingsValue');
         
         if (quantityInput && paymentSection && totalAmountElement) {
             const quantity = parseInt(quantityInput.value) || 0;
             
                     if (quantity > 0) {
             const selectedSensor = document.getElementById('sensorType').value;
-            const sensorPrice = CONFIG.SENSORS[selectedSensor]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price;
+            const sensorCfg = CONFIG.SENSORS[selectedSensor] || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR];
+            const sensorPrice = sensorCfg.price;
+            const perSensorSavings = sensorCfg.savings || 0;
             const totalAmount = quantity * sensorPrice;
             totalAmountElement.textContent = `₹${totalAmount.toLocaleString()}`;
+            if (perSensorSavings > 0 && savingsLine && savingsValue) {
+                const totalSavings = perSensorSavings * quantity;
+                savingsValue.textContent = `₹${totalSavings.toLocaleString()}`;
+                savingsLine.style.display = 'block';
+            } else if (savingsLine) {
+                savingsLine.style.display = 'none';
+            }
                 paymentSection.style.display = 'block';
                 
                 // Smooth scroll to payment section
@@ -536,6 +565,9 @@ class CGMOrderManager {
         
         const sensorType = this.getSensorTypeName(orderData.sensorType);
         const pickupLocation = this.getPickupLocationName(orderData.pickupLocation);
+        const sensorCfg = CONFIG.SENSORS[orderData.sensorType] || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR];
+        const perSensorSavings = sensorCfg && sensorCfg.savings ? Number(sensorCfg.savings) : 0;
+        const totalSavings = perSensorSavings * (parseInt(orderData.quantity) || 0);
         
         orderDetails.innerHTML = `
             <strong>Order Details:</strong><br>
@@ -545,6 +577,7 @@ class CGMOrderManager {
             <strong>Sensor:</strong> ${sensorType}<br>
             <strong>Quantity:</strong> ${orderData.quantity}<br>
             <strong>Total Amount:</strong> ₹${orderData.totalAmount.toLocaleString()}<br>
+            ${perSensorSavings > 0 ? `<strong>You save:</strong> ₹${totalSavings.toLocaleString()} (₹${perSensorSavings.toLocaleString()} × ${orderData.quantity})<br>` : ''}
             <strong>Pickup:</strong> ${pickupLocation}<br>
             ${orderData.notes ? `<strong>Notes:</strong> ${orderData.notes}<br>` : ''}
         `;

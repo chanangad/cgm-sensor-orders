@@ -2,6 +2,9 @@
 // Update these values as needed
 
 const CONFIG = {
+    // Optional delivery cycle label shown next to title, e.g., 'September 2025'
+    // Leave empty to auto-use current Month Year
+    DELIVERY_CYCLE: 'September 2025',
     
     // Google Apps Script URL - update this when you set up Google Drive
     GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwuX68cZfPSmifg3hsG29UGxCBW5oSx_J12WnTyWtwDBY28OATGTMKPH4IpMRNfMQOW/exec',
@@ -14,7 +17,7 @@ const CONFIG = {
         'linx': {
             name: 'Linx',
             price: 3900,
-            savings: 500
+            savings: 600
         }
     },
     
