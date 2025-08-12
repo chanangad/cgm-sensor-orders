@@ -5,6 +5,14 @@ const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
     DELIVERY_CYCLE: 'September 2025',
+    // Optional specific date for the next run (used only in the header meta)
+    // Example: '14th'
+    NEXT_RUN_DATE: '14th',
+
+    // Show recent orders from Google Sheets instead of local browser cache
+    USE_SERVER_ORDERS: false,
+    // How many recent orders to fetch when USE_SERVER_ORDERS is true
+    ORDERS_FETCH_LIMIT: 10,
     
     // Google Apps Script URL - update this when you set up Google Drive
     GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwuX68cZfPSmifg3hsG29UGxCBW5oSx_J12WnTyWtwDBY28OATGTMKPH4IpMRNfMQOW/exec',
