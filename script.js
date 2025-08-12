@@ -511,6 +511,12 @@ class CGMOrderManager {
       return
     }
 
+    // Get submit button and show processing state
+    const submitBtn = document.querySelector(".submit-btn")
+    const originalButtonContent = submitBtn.innerHTML
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+    submitBtn.disabled = true
+
     // Get the form element
     const form = document.getElementById("orderForm")
     const formData = new FormData(form)
@@ -530,10 +536,16 @@ class CGMOrderManager {
     const paymentScreenshot = document.getElementById("paymentScreenshot")
     if (!paymentScreenshot || paymentScreenshot.files.length === 0) {
       this.showFieldError(paymentScreenshot, "Payment screenshot is required")
+      // Reset button state on validation failure
+      submitBtn.innerHTML = originalButtonContent
+      submitBtn.disabled = false
       return
     }
 
     if (!isValid) {
+      // Reset button state on validation failure
+      submitBtn.innerHTML = originalButtonContent
+      submitBtn.disabled = false
       return
     }
 
@@ -565,6 +577,9 @@ class CGMOrderManager {
       } catch (error) {
         console.error("Upload failed:", error)
         alert("Screenshot upload failed. Please retry.")
+        // Reset button state on upload failure
+        submitBtn.innerHTML = originalButtonContent
+        submitBtn.disabled = false
         return
       }
     }
@@ -584,6 +599,10 @@ class CGMOrderManager {
 
     // Show success modal
     this.showSuccessModal(orderData)
+
+    // Reset button state on success
+    submitBtn.innerHTML = originalButtonContent
+    submitBtn.disabled = false
 
     // Reset form and hide payment section
     form.reset()
@@ -942,17 +961,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function addHelpfulFeatures() {
-  // Add loading animation to submit button
-  const submitBtn = document.querySelector(".submit-btn")
-  submitBtn.addEventListener("click", function () {
-    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...'
-    this.disabled = true
-
-    setTimeout(() => {
-      this.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Order'
-      this.disabled = false
-    }, 2000)
-  })
+  // Button state is now managed in handleFormSubmit() method
 
   // Add hover effects to stat cards
   const statCards = document.querySelectorAll(".stat-card")
