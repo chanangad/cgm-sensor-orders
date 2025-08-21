@@ -28,8 +28,8 @@ const CONFIG = {
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3900,
-            savings: 600
+            price: 3700,
+            savings: 800
         }
     },
     
