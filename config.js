@@ -11,7 +11,7 @@ const CONFIG = {
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: ', 12PM, 1st November \'25',
+    ORDER_CLOSES_DATE: '12PM, 1st November \'25',
 
     // Show recent orders from Google Sheets instead of local browser cache
     USE_SERVER_ORDERS: true,
