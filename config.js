@@ -32,7 +32,7 @@ const CONFIG = {
             savings: 900
         },
         'libre': {
-            name: 'Libre',
+            name: 'Libre 1',
             price: 3650,
             savings: 450
         },
