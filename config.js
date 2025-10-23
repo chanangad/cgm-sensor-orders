@@ -42,7 +42,7 @@ const CONFIG = {
     // Pickup locations - customize these as needed
     PICKUP_LOCATIONS: {
         //'cubbon-park': 'Cubbon Park',
-        'KIER, Indiranagar': 'KIER, Indiranagar',
+        'Bengaluru': 'Bengaluru',
     },
     
     // Default sensor (first one in the list)
