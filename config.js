@@ -7,7 +7,7 @@ const CONFIG = {
     DELIVERY_CYCLE: 'November \'25',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '9th',
+    NEXT_RUN_DATE: '8th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
