@@ -176,7 +176,7 @@ class CGMOrderManager {
       label = `(${month} ${year})`
     }
     if (el) el.textContent = ` ${label}`
-    const dateText = nextRunDate ? `${nextRunDate} ${label} (tentative)` : `${label}`
+    const dateText = nextRunDate ? `${nextRunDate} ${label}` : `${label}`
     // Header uses NEXT_RUN_DATE + DELIVERY_CYCLE; info section should only show DELIVERY_CYCLE
     inlineEls.forEach((n) => {
       n.textContent = dateText
