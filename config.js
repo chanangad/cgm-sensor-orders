@@ -7,11 +7,11 @@ const CONFIG = {
     DELIVERY_CYCLE: 'November \'25',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '9th',
+    NEXT_RUN_DATE: '8th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: '2nd November \'25',
+    ORDER_CLOSES_DATE: '12PM, 1st November \'25',
 
     // Show recent orders from Google Sheets instead of local browser cache
     USE_SERVER_ORDERS: true,
@@ -19,10 +19,13 @@ const CONFIG = {
     ORDERS_FETCH_LIMIT: 10,
     
     // Google Apps Script URL - update this when you set up Google Drive
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbznvJRP-LkLH1FnY_bH0k-7YA2WepkfBhb5yGMMKWxBvQs3K-adMZE1EuOMcQiLcARC/exec',
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyRkkLR6OAff5Nq38-bf58_qddiI3Bu5CQJRZs-xmgz4XUo6BVcwflGK4m4YOVbE3RQ/exec',
     
-    // UPI ID
+    // UPI ID for payment
     UPI_ID: 'chanangad-1@okicici',
+    
+    // UPI Recipient Name (for verification - used in backend)
+    UPI_RECIPIENT_NAME: 'Angad Chandhok',
     
     // Sensor configuration - customize these as needed
     SENSORS: {
@@ -32,15 +35,17 @@ const CONFIG = {
             savings: 900
         },
         'libre': {
-            name: 'Libre',
+            name: 'Libre 1',
             price: 3650,
             savings: 450
-        }
+        },
+        
     },
     
     // Pickup locations - customize these as needed
     PICKUP_LOCATIONS: {
-        'cubbon-park': 'Cubbon Park',
+        //'cubbon-park': 'Cubbon Park',
+        'KIER, Indiranagar': 'KIER, Indiranagar',
     },
     
     // Default sensor (first one in the list)
