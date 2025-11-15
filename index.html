@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CGM Sensor Pre‑Order – Diabuddies of Karnataka</title>
-    <link rel="stylesheet" href="styles.css?v=5">
+    <link rel="stylesheet" href="styles.css?v=6">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,27 +12,32 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1>CGM Sensor Pre‑Order</h1>
-                <p class="subtitle">Diabuddies of Karnataka</p>
-                <div class="header-meta">
-                    <i class="fas fa-calendar"></i>
-                    Next Run: <span class="deliveryCycleInline"></span>
+                <div class="header-logo">
+                    <img src="title-mark.png" alt="Diabuddies of Karnataka Logo" class="logo-image">
                 </div>
-                <div class="header-meta">
-                    <i class="fas fa-hourglass-half"></i>
-                    Orders close: <span id="ordersCloseInline"></span>
-                </div>
-                <div class="order-toggle" id="orderToggleContainer" style="display: none;">
-                    <label class="toggle-label">
-                        <input type="checkbox" id="orderToggle" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-text">Accepting Orders</span>
-                    </label>
-                </div>
-                <div class="admin-login">
-                    <button type="button" id="adminLoginBtn" class="admin-btn">
-                        <i class="fas fa-cog"></i> Admin
-                    </button>
+                <div class="header-main">
+                    <h1>CGM Sensor Pre‑Order</h1>
+                    <p class="subtitle">Diabuddies of Karnataka</p>
+                    <div class="header-meta">
+                        <i class="fas fa-calendar"></i>
+                        Collection Date: <span class="deliveryCycleInline"></span>
+                    </div>
+                    <div class="header-meta">
+                        <i class="fas fa-hourglass-half"></i>
+                        Orders close: <span id="ordersCloseInline"></span>
+                    </div>
+                    <div class="order-toggle" id="orderToggleContainer" style="display: none;">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="orderToggle" checked>
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Accepting Orders</span>
+                        </label>
+                    </div>
+                    <div class="admin-login">
+                        <button type="button" id="adminLoginBtn" class="admin-btn">
+                            <i class="fas fa-cog"></i> Admin
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -44,10 +49,10 @@
                 <div class="info-content">
                     <p>
                         The sensors can be pre‑ordered by filling this form and can be collected during the
-                        upcoming Type One Run scheduled in <strong><span class="deliveryCycleInlineInfo"></span></strong>.
+                        upcoming Type One Run/Group Meetup scheduled in <strong><span class="deliveryCycleInlineInfo"></span></strong>.
                     </p>
                     <p>
-                        This form typically opens every 2–3 months. Please order accordingly — it’s advisable to stock up
+                        This form typically opens every 2–3 months. Please order accordingly — it's advisable to stock up
                         for the next 2–3 months based on your usage.
                     </p>
                     <p>
@@ -55,12 +60,11 @@
                         community can benefit from slightly better prices. We do not make any profit from this.
                     </p>
                     <p>
-                        Shipping sensors outside the city isn’t possible as it’s not sustainable for the coordinators.
-                        For any faulty sensors, we won’t be responsible — please reach out to the respective
-                        company’s support for replacements under their policy.
+                        Shipping sensors outside the city isn't possible as it's not sustainable for the coordinators.
+                        For any faulty sensors, we won't be responsible — please <a href="#customer-support">reach out to the respective company's support</a> for replacements under their policy.
                     </p>
                     <p>
-                        Orders can be collected in person only during the Type One Run event for
+                        Orders can be collected in person only during the Type One Run/Group Meetup event for
                         <strong><span class="deliveryCycleInlineInfo"></span></strong>. For updates and details, please check the
                         Diabuddies of Karnataka WhatsApp group.
                     </p>
@@ -89,6 +93,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="email">Email (for confirmation) *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="sensorType">Sensor Type *</label>
                             <select id="sensorType" name="sensorType" required>
                                 <option value="">Select sensor type</option>
@@ -97,7 +106,15 @@
 
                         <div class="form-group">
                             <label for="quantity">Quantity *</label>
-                            <input type="number" id="quantity" name="quantity" min="1" max="10" required>
+                            <select id="quantity" name="quantity" required>
+                                <option value="">Select quantity</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
                         </div>
 
                         <!-- Payment Section -->
@@ -137,10 +154,11 @@
                             <div class="payment-instructions">
                                 <h4><i class="fas fa-info-circle"></i> Payment Instructions</h4>
                                 <ol>
-                                    <li>Pay the “Total Amount Due” shown above using UPI</li>
+                                    <li>Pay the "Total Amount Due" shown above using UPI</li>
                                     <li>Take a screenshot of the payment confirmation</li>
-                                    <li>Upload the screenshot below</li>
-                                    <li>Complete your order</li>
+                                    <li>Note down the transaction ID from your payment</li>
+                                    <li>Upload the screenshot and enter the transaction ID below</li>
+                                    <li>Complete your order (screenshot will be verified automatically)</li>
                                 </ol>
                             </div>
 
@@ -148,6 +166,12 @@
                                 <label for="paymentScreenshot">Payment Screenshot *</label>
                                 <input type="file" id="paymentScreenshot" name="paymentScreenshot" accept="image/*" required>
                                 <small>Upload screenshot of your UPI payment confirmation</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="transactionId">Transaction ID *</label>
+                                <input type="text" id="transactionId" name="transactionId" required placeholder="Enter your UPI transaction ID">
+                                <small>Enter the transaction ID from your payment confirmation</small>
                             </div>
                         </div>
 
@@ -157,10 +181,6 @@
                                 <option value="">Select pickup location</option>
                             </select>
                         </div>
-
-                        
-
-                        
 
                         <button type="button" class="submit-btn" onclick="window.cgmOrderManager.handleFormSubmit(event)">
                             <i class="fas fa-paper-plane"></i> Submit Order
@@ -215,6 +235,36 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Customer support (manufacturer contacts) -->
+        <section id="customer-support" class="info-section support-section">
+            <div class="info-container">
+                    <h2><i class="fas fa-headset"></i> Customer support</h2>
+                <div class="info-content">
+                    <p>If a sensor you received is faulty, contact the manufacturer's support team for replacement/warranty assistance. When contacting them, keep your photos of the faulty sensor and serial number handy.</p>
+
+                    <div class="support-grid">
+                        <div class="support-card" style="margin-bottom:12px;">
+                            <h3>Linx</h3>
+                            <p style="margin:0 0 4px 0;">
+                                Report a faulty Linx sensor using their online form and then call customer care if needed:
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeI0kyVk5lIjmWEr0UokrAiASc_TwUE8Y3qmJ7JXJuCB1CfBw/viewform" target="_blank" rel="noopener">Fill Linx faulty-sensor form</a>
+                            </p>
+                            <p style="margin:0;"><strong>Customer care (phone):</strong> +91-7477475800</p>
+                        </div>
+
+                        <div class="support-card">
+                            <h3>Libre</h3>
+                            <p style="margin:0 0 4px 0;">
+                                Report a faulty Libre sensor using their online form and then call customer care if needed:
+                                <a href="https://www.freestyle.abbott/en-in/support/sensor-support-form.html" target="_blank" rel="noopener">Fill Libre faulty-sensor form</a>
+                            </p>
+                            <p style="margin:0;"><strong>Customer care (phone):</strong> 1800 2100 998</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <footer class="footer">
             <p>&copy; 2025 Angad Chandhok. Made with ❤️ for our diabetes community.</p>
@@ -224,4 +274,4 @@
     <script src="config.js?v=5"></script>
     <script src="script.js?v=5"></script>
 </body>
-</html> 
+</html>
