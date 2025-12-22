@@ -4,7 +4,7 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'January \2026',
+    DELIVERY_CYCLE: 'January 2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
     NEXT_RUN_DATE: '11th',
