@@ -4,14 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'November \'25',
+    DELIVERY_CYCLE: 'January \'26',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '8th',
+    NEXT_RUN_DATE: '11th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: '12PM, 1st November \'25',
+    ORDER_CLOSES_DATE: '12PM, 2nd January \'26',
 
     // Show recent orders from Google Sheets instead of local browser cache
     USE_SERVER_ORDERS: true,
@@ -22,7 +22,7 @@ const CONFIG = {
     GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwJ2x4g0LZ9TJtiEHegQuvU6n4C4qkUaMz8NLZG1pjPSP_s5nMaMwslewwpS8HrS30G/exec',
     
     // UPI ID for payment
-    UPI_ID: 'chanangad-1@okicici',
+    UPI_ID: 'anirudh.talakanti-2@okaxis',
     
     // UPI Recipient Name (for verification - used in backend)
     UPI_RECIPIENT_NAME: 'Angad Chandhok',
@@ -31,8 +31,8 @@ const CONFIG = {
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3400,
-            savings: 900
+            price: 3300,
+            savings: 1000
         },
         'libre': {
             name: 'Libre 1',
@@ -44,8 +44,8 @@ const CONFIG = {
     
     // Pickup locations - customize these as needed
     PICKUP_LOCATIONS: {
-        //'cubbon-park': 'Cubbon Park',
-        'KIER, Indiranagar': 'KIER, Indiranagar',
+        'cubbon-park': 'Cubbon Park',
+        // 'KIER, Indiranagar': 'KIER, Indiranagar',
     },
     
     // Default sensor (first one in the list)
