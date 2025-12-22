@@ -4,7 +4,7 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'January \'26',
+    DELIVERY_CYCLE: 'January \2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
     NEXT_RUN_DATE: '11th',
@@ -31,8 +31,8 @@ const CONFIG = {
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3300,
-            savings: 1000
+            price: 3325,
+            savings: 975
         },
         'libre': {
             name: 'Libre 1',
