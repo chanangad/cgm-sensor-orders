@@ -34,11 +34,11 @@ const CONFIG = {
             price: 3325,
             savings: 975
         },
-        'libre': {
-            name: 'Libre 1',
-            price: 3650,
-            savings: 450
-        },
+        // 'libre': {
+        //     name: 'Libre 1',
+        //     price: 3650,
+        //     savings: 450
+        // },
         
     },
     
