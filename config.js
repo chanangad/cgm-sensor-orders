@@ -22,7 +22,7 @@ const CONFIG = {
     GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw02wY6IVWwsIO8ou2CtjujOIiCmjBOe3KUctZ8KJfDivgsKg8StUy7EV48N-MMOZEE/exec',
     
     // UPI ID for payment
-    UPI_ID: 'chanangad-1@okicici',
+    UPI_ID: 'anirudh.talakanti-2@okaxis',
     
     // UPI Recipient Name (for verification - used in backend)
     UPI_RECIPIENT_NAME: 'Angad Chandhok',
