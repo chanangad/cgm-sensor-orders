@@ -613,7 +613,6 @@ class CGMOrderManager {
             const itemsHtml = items.map(i => `<li>${i.name} × ${i.qty} — ₹${i.subtotal.toLocaleString()}</li>`).join('');
 
             details.innerHTML = `
-                <p><strong>Order ID:</strong> #${orderData.id.toString().slice(-6)}</p>
                 <p><strong>Name:</strong> ${orderData.name}</p>
                 <p><strong>Items:</strong></p>
                 <ul style="margin: 0.5rem 0 0.5rem 1.25rem; list-style: disc;">${itemsHtml}</ul>
