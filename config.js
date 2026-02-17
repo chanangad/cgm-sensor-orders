@@ -19,7 +19,7 @@ const CONFIG = {
     ORDERS_FETCH_LIMIT: 10,
 
     // Google Apps Script URL - update this when you set up Google Drive
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyHNs5on9IWYs9W4sHdlY7tMzjZTJN1wtFyuhq9ns10UZVfouPI2AyPp1MFuK_fnSg4/exec',
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwXtTeXLz_8O-ZfraWmgCRgfkjxC1Yk2jBDj-vaCsee4VYxjc0ZIVb97ObzJbhch0FC/exec',
 
     // UPI ID for payment
     UPI_ID: 'singh.beenu@ptyes',
