@@ -312,9 +312,39 @@ class CGMOrderManager {
                 } else if (savingsLine) {
                     savingsLine.style.display = 'none';
                 }
+
+                // Check for max order limit
+                const limitWarning = document.getElementById('limitWarning');
+                const submitBtn = document.querySelector('.submit-btn');
+
+                if (CONFIG.MAX_ORDER_AMOUNT && totalAmount > CONFIG.MAX_ORDER_AMOUNT) {
+                    if (!limitWarning) {
+                        const warning = document.createElement('div');
+                        warning.id = 'limitWarning';
+                        warning.style.color = '#ef4444';
+                        warning.style.fontSize = '0.9rem';
+                        warning.style.marginTop = '0.5rem';
+                        warning.style.fontWeight = '600';
+                        warning.textContent = `Maximum order amount is ₹${CONFIG.MAX_ORDER_AMOUNT.toLocaleString()}. Please reduce quantity.`;
+                        totalAmountElement.parentNode.appendChild(warning);
+                    } else {
+                        limitWarning.style.display = 'block';
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                    }
+                } else {
+                    if (limitWarning) limitWarning.style.display = 'none';
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                    }
+                }
+
                 paymentSection.style.display = 'block';
-
-
             } else {
                 paymentSection.style.display = 'none';
             }
@@ -504,6 +534,13 @@ class CGMOrderManager {
         }
         orderData.items = items;
         orderData.totalAmount = items.reduce((s, i) => s + i.subtotal, 0);
+
+        // Check for max order limit
+        if (CONFIG.MAX_ORDER_AMOUNT && orderData.totalAmount > CONFIG.MAX_ORDER_AMOUNT) {
+            alert(`Order value cannot exceed ₹${CONFIG.MAX_ORDER_AMOUNT.toLocaleString()}. Please reduce the quantity.`);
+            return;
+        }
+
         // Build a legacy-friendly sensorType + quantity for backend compatibility
         orderData.sensorType = items.map(i => i.name).join(', ');
         orderData.quantity = items.reduce((s, i) => s + i.qty, 0);

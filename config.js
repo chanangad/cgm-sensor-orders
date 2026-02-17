@@ -13,6 +13,9 @@ const CONFIG = {
     // Example: '7th September 2025'
     ORDER_CLOSES_DATE: '1st March \'26',
 
+    // Maximum order amount allowed in INR
+    MAX_ORDER_AMOUNT: 25000,
+
     // Show recent orders from Google Sheets instead of local browser cache
     USE_SERVER_ORDERS: true,
     // How many recent orders to fetch when USE_SERVER_ORDERS is true
