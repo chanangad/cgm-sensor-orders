@@ -28,19 +28,10 @@ class CGMOrderManager {
         const adminLoginBtn = document.getElementById('adminLoginBtn');
 
         if (form) {
-            // Remove any existing submit listeners
-            const newForm = form.cloneNode(true);
-            form.parentNode.replaceChild(newForm, form);
-
-            // Get the new form reference
-            const updatedForm = document.getElementById('orderForm');
-
-            updatedForm.addEventListener('submit', (e) => {
+            form.addEventListener('submit', (e) => {
                 console.log('Form submit event triggered');
-                e.preventDefault(); // Prevent default form submission
-                e.stopPropagation(); // Stop event bubbling
+                e.preventDefault();
                 this.handleFormSubmit(e);
-                return false; // Extra prevention
             });
         } else {
             console.error('Form element not found!');
@@ -102,15 +93,7 @@ class CGMOrderManager {
         this.populateSensorOptions();
         this.populatePickupLocations();
 
-        // Add submit button click test
-        const submitBtn = form?.querySelector('.submit-btn');
-        if (submitBtn) {
-            submitBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.handleFormSubmit(e);
-            });
-        }
+
 
         console.log('Event listeners setup completed');
     }
@@ -321,15 +304,30 @@ class CGMOrderManager {
                     if (!limitWarning) {
                         const warning = document.createElement('div');
                         warning.id = 'limitWarning';
+                        warning.className = 'limit-warning';
                         warning.style.color = '#ef4444';
-                        warning.style.fontSize = '0.9rem';
-                        warning.style.marginTop = '0.5rem';
-                        warning.style.fontWeight = '600';
+                        warning.style.background = '#fee2e2';
+                        warning.style.padding = '0.75rem';
+                        warning.style.borderRadius = '8px';
+                        warning.style.marginTop = '1rem';
+                        warning.style.fontWeight = '700';
+                        warning.style.border = '1px solid #fecaca';
                         warning.textContent = `Maximum order amount is ₹${CONFIG.MAX_ORDER_AMOUNT.toLocaleString()}. Please reduce quantity.`;
-                        totalAmountElement.parentNode.appendChild(warning);
+                        totalAmountElement.parentNode.parentNode.appendChild(warning);
                     } else {
                         limitWarning.style.display = 'block';
                     }
+
+                    // Hide payment details so they don't pay!
+                    const upiDetails = document.querySelector('.upi-details');
+                    const paymentInstructions = document.querySelector('.payment-instructions');
+                    const screenshotGroup = document.getElementById('paymentScreenshot')?.closest('.form-group');
+
+                    if (upiDetails) upiDetails.style.display = 'none';
+                    if (paymentInstructions) paymentInstructions.style.display = 'none';
+                    if (screenshotGroup) screenshotGroup.style.display = 'none';
+                    totalAmountElement.style.color = '#ef4444';
+
                     if (submitBtn) {
                         submitBtn.disabled = true;
                         submitBtn.style.opacity = '0.5';
@@ -337,6 +335,17 @@ class CGMOrderManager {
                     }
                 } else {
                     if (limitWarning) limitWarning.style.display = 'none';
+
+                    // Show payment details back
+                    const upiDetails = document.querySelector('.upi-details');
+                    const paymentInstructions = document.querySelector('.payment-instructions');
+                    const screenshotGroup = document.getElementById('paymentScreenshot')?.closest('.form-group');
+
+                    if (upiDetails) upiDetails.style.display = 'flex';
+                    if (paymentInstructions) paymentInstructions.style.display = 'block';
+                    if (screenshotGroup) screenshotGroup.style.display = 'block';
+                    totalAmountElement.style.color = '';
+
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.style.opacity = '1';
