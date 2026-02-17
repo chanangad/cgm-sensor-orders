@@ -130,6 +130,7 @@ h1 {
     line-height: 1.1;
     background: linear-gradient(135deg, var(--brand-blue) 0%, #2563eb 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
 }
@@ -608,6 +609,7 @@ section {
     padding: 0.4rem 0;
     background: transparent;
     -moz-appearance: textfield;
+    appearance: textfield;
     outline: none;
 }
 
@@ -880,6 +882,8 @@ section {
     padding: 3rem 0;
     color: var(--text-muted);
     font-size: 0.9rem;
+    position: relative;
+    z-index: 0;
 }
 
 /* Scrollbar */
