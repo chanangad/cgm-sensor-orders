@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,11 @@
     <link rel="stylesheet" href="styles.css?v=7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
+
 <body>
     <!-- Decorative Background Shapes -->
     <div class="bg-shape shape-1"></div>
@@ -21,7 +24,7 @@
             <img src="logo.png" alt="Diabuddies of Karnataka Logo" class="header-logo">
             <h1>CGM Sensor Pre‑Order</h1>
             <p class="subtitle">Diabuddies of Karnataka</p>
-            
+
             <div class="header-badges">
                 <div class="header-meta">
                     <i class="ph-fill ph-calendar-blank"></i>
@@ -40,7 +43,7 @@
                     <span class="toggle-text">Accepting Orders</span>
                 </label>
             </div>
-            
+
             <div class="admin-login">
                 <button type="button" id="adminLoginBtn" class="admin-btn" title="Admin Settings">
                     <i class="ph-fill ph-gear"></i>
@@ -56,19 +59,30 @@
                 <h2><i class="ph-fill ph-info"></i> Please read before ordering</h2>
                 <div class="info-content">
                     <p>
-                        The sensors can be pre‑ordered by filling this form and can be collected during the upcoming Type One Run/Group Meetup scheduled in <strong><span class="deliveryCycleInlineInfo"></span></strong>.
+                        The sensors can be pre‑ordered by filling this form and can be collected during the upcoming
+                        Type One Run/Group Meetup scheduled in <strong><span
+                                class="deliveryCycleInlineInfo"></span></strong>.
                     </p>
                     <p>
-                        This form typically opens every 2–3 months. Please order accordingly — it’s advisable to stock up for the next 2–3 months based on your usage.
+                        This form typically opens every 2–3 months. Please order accordingly — it’s advisable to stock
+                        up for the next 2–3 months based on your usage.
                     </p>
                     <p>
-                        This is a community service run by volunteers of <span class="highlight">Diabuddies of Karnataka</span> so that our T1D community can benefit from slightly better prices. We do not make any profit from this.
+                        This is a community service run by volunteers of <span class="highlight">Diabuddies of
+                            Karnataka</span> so that our T1D community can benefit from slightly better prices. We do
+                        not make any profit from this.
                     </p>
                     <p>
-                        Shipping sensors outside the city isn’t possible as it’s not sustainable for the coordinators. For any faulty sensors, we won’t be responsible — please reach out to the respective company’s <a href="#customer-support" style="color: var(--brand-blue); text-decoration: underline;">support</a> for replacements under their policy.
+                        Shipping sensors outside the city isn’t possible as it’s not sustainable for the coordinators.
+                        For any faulty sensors, we won’t be responsible — please reach out to the respective company’s
+                        <a href="#customer-support"
+                            style="color: var(--brand-blue); text-decoration: underline;">support</a> for replacements
+                        under their policy.
                     </p>
                     <p>
-                        Orders can be collected in person only during the Type One Run/Group Meetup event for <strong><span class="deliveryCycleInlineInfo"></span></strong>. For updates and details, please check the Diabuddies of Karnataka WhatsApp group.
+                        Orders can be collected in person only during the Type One Run/Group Meetup event for
+                        <strong><span class="deliveryCycleInlineInfo"></span></strong>. For updates and details, please
+                        check the Diabuddies of Karnataka WhatsApp group.
                     </p>
                 </div>
             </div>
@@ -86,7 +100,8 @@
                         </div>
                         <div class="form-group">
                             <label for="guardianName">Parent/Guardian Name (Optional)</label>
-                            <input type="text" id="guardianName" name="guardianName" placeholder="If ordering for a child, enter parent/guardian name">
+                            <input type="text" id="guardianName" name="guardianName"
+                                placeholder="If ordering for a child, enter parent/guardian name">
                         </div>
 
                         <div class="form-group">
@@ -100,29 +115,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="sensorType">Sensor Type *</label>
-                            <select id="sensorType" name="sensorType" required>
-                                <option value="">Select sensor type</option>
-                            </select>
-                        </div>
-
-                       <div class="form-group">
-                            <label for="quantity">Quantity *</label>
-                            <select id="quantity" name="quantity" required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                
-                            </select>
+                            <label>Select Items & Quantities *</label>
+                            <div id="productPicker" class="product-picker">
+                                <!-- Dynamically populated by script.js -->
+                            </div>
                         </div>
 
                         <!-- Payment Section -->
                         <div id="paymentSection" class="payment-section" style="display: none;">
                             <h3><i class="ph-fill ph-credit-card"></i> Payment Details</h3>
-                            
+
                             <div class="total-amount">
                                 <div class="amount-display">
                                     <span class="amount-label">Total Amount Due:</span>
@@ -138,17 +140,17 @@
                                     <h4><i class="ph-fill ph-device-mobile-camera"></i> UPI Payment</h4>
                                     <div class="upi-id">
                                         <span class="upi-label">UPI ID:</span>
-                                        <span class="upi-value">anirudh.talakanti-2@okaxis</span>
+                                        <span class="upi-value">singh.beenu@ptyes</span>
                                         <button type="button" class="copy-btn" onclick="copyUPI()">
                                             <i class="ph-bold ph-copy"></i>
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div class="qr-section">
                                     <h4><i class="ph-fill ph-qr-code"></i> Scan QR Code</h4>
                                     <div class="qr-container">
-                                        <img src="ani.png" alt="UPI QR Code" class="qr-code">
+                                        <img src="beenu.png" alt="UPI QR Code" class="qr-code">
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +167,8 @@
 
                             <div class="form-group">
                                 <label for="paymentScreenshot">Payment Screenshot *</label>
-                                <input type="file" id="paymentScreenshot" name="paymentScreenshot" accept="image/*" required>
+                                <input type="file" id="paymentScreenshot" name="paymentScreenshot" accept="image/*"
+                                    required>
                                 <small>Upload screenshot of your UPI payment confirmation</small>
                             </div>
                         </div>
@@ -177,11 +180,12 @@
                             </select>
                         </div>
 
-                        
 
-                        
 
-                        <button type="button" class="submit-btn" onclick="window.cgmOrderManager.handleFormSubmit(event)">
+
+
+                        <button type="button" class="submit-btn"
+                            onclick="window.cgmOrderManager.handleFormSubmit(event)">
                             <i class="ph-bold ph-paper-plane-right"></i> Submit Order
                         </button>
                     </form>
@@ -224,14 +228,18 @@
                 <h2><i class="ph-fill ph-headset"></i> Customer support</h2>
                 <div class="info-content">
                     <p>
-                        If a sensor you received is faulty, contact the manufacturer's support team for replacement/warranty assistance. When contacting them, keep your photos of the faulty sensor and serial number handy.
+                        If a sensor you received is faulty, contact the manufacturer's support team for
+                        replacement/warranty assistance. When contacting them, keep your photos of the faulty sensor and
+                        serial number handy.
                     </p>
-                    
+
                     <div style="margin-top: 1.5rem;">
                         <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Linx</h3>
                         <p style="margin-bottom: 0.5rem;">
-                            Report a faulty Linx sensor using their online form and then call customer care if needed: 
-                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeI0kyVk5lIjmWEr0UokrAiASc_TwUE8Y3qmJ7JXJuCB1CfBw/viewform" target="_blank" style="color: var(--brand-blue); text-decoration: underline;">Fill Linx faulty-sensor form</a>
+                            Report a faulty Linx sensor using their online form and then call customer care if needed:
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeI0kyVk5lIjmWEr0UokrAiASc_TwUE8Y3qmJ7JXJuCB1CfBw/viewform"
+                                target="_blank" style="color: var(--brand-blue); text-decoration: underline;">Fill Linx
+                                faulty-sensor form</a>
                         </p>
                         <p><strong>Customer care (phone):</strong> +91-7477475800</p>
                     </div>
@@ -239,8 +247,10 @@
                     <div style="margin-top: 1.5rem;">
                         <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Libre</h3>
                         <p style="margin-bottom: 0.5rem;">
-                            Report a faulty Libre sensor using their online form and then call customer care if needed: 
-                            <a href="https://www.freestyle.abbott/en-in/support/sensor-support-form.html" target="_blank" style="color: var(--brand-blue); text-decoration: underline;">Fill Libre faulty-sensor form</a>
+                            Report a faulty Libre sensor using their online form and then call customer care if needed:
+                            <a href="https://www.freestyle.abbott/en-in/support/sensor-support-form.html"
+                                target="_blank" style="color: var(--brand-blue); text-decoration: underline;">Fill Libre
+                                faulty-sensor form</a>
                         </p>
                         <p><strong>Customer care (phone):</strong> 1800 2100 998</p>
                     </div>
@@ -256,7 +266,9 @@
                     <h3>Order Placed!</h3>
                 </div>
                 <div class="modal-body">
-                    <p>Thank you for your order. We will post an update on the Diabuddies of Karnataka WhatsApp group once the sensors arrive. They can be collected in person at the next Type One Run at Cubbon Park.</p>
+                    <p>Thank you for your order. We will post an update on the Diabuddies of Karnataka WhatsApp group
+                        once the sensors arrive. They can be collected in person at the next Type One Run at Cubbon
+                        Park.</p>
                     <div class="order-details-modal" id="orderDetails"></div>
                 </div>
                 <div class="modal-footer">
@@ -265,7 +277,7 @@
             </div>
         </div>
 
-        </div>
+    </div>
 
     <footer class="footer">
         <p>&copy; 2025 Angad Chandhok. Made with ❤️ for our diabetes community.</p>
@@ -284,4 +296,5 @@
     <script src="config.js?v=1"></script>
     <script src="script.js?v=8"></script>
 </body>
-</html> 
+
+</html>

@@ -5,7 +5,7 @@ class CGMOrderManager {
         this.orders = this.loadOrders();
         this.sensorPrices = CONFIG.SENSORS;
         this.ordersEnabled = true;
-        
+
         this.init();
     }
 
@@ -20,7 +20,7 @@ class CGMOrderManager {
 
     setupEventListeners() {
         console.log('Setting up event listeners...');
-        
+
         const form = document.getElementById('orderForm');
         const modal = document.getElementById('successModal');
         const closeModal = document.getElementById('closeModal');
@@ -31,10 +31,10 @@ class CGMOrderManager {
             // Remove any existing submit listeners
             const newForm = form.cloneNode(true);
             form.parentNode.replaceChild(newForm, form);
-            
+
             // Get the new form reference
             const updatedForm = document.getElementById('orderForm');
-            
+
             updatedForm.addEventListener('submit', (e) => {
                 console.log('Form submit event triggered');
                 e.preventDefault(); // Prevent default form submission
@@ -49,12 +49,12 @@ class CGMOrderManager {
         if (closeModal) {
             closeModal.addEventListener('click', () => this.closeModal());
         }
-        
+
         // Admin login functionality
         if (adminLoginBtn) {
             adminLoginBtn.addEventListener('click', () => this.showAdminLogin());
         }
-        
+
         // Order toggle functionality
         if (orderToggle) {
             orderToggle.addEventListener('change', async (e) => {
@@ -82,7 +82,7 @@ class CGMOrderManager {
                 }
             });
         }
-        
+
         // Close modal when clicking outside
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -97,11 +97,11 @@ class CGMOrderManager {
         this.updateOrderFormState();
         // Fetch current status from server
         this.fetchOrderStatus();
-        
+
         // Populate dynamic options
         this.populateSensorOptions();
         this.populatePickupLocations();
-        
+
         // Add submit button click test
         const submitBtn = form?.querySelector('.submit-btn');
         if (submitBtn) {
@@ -111,18 +111,18 @@ class CGMOrderManager {
                 this.handleFormSubmit(e);
             });
         }
-        
+
         console.log('Event listeners setup completed');
     }
 
     addFormValidation() {
         const inputs = document.querySelectorAll('input, select, textarea');
-        
+
         inputs.forEach(input => {
             input.addEventListener('blur', () => {
                 this.validateField(input);
             });
-            
+
             input.addEventListener('input', () => {
                 if (input.classList.contains('error')) {
                     this.clearFieldError(input);
@@ -130,21 +130,7 @@ class CGMOrderManager {
             });
         });
 
-        // Add quantity change listener for payment calculation
-        const quantityInput = document.getElementById('quantity');
-        const sensorSelect = document.getElementById('sensorType');
-        
-        if (quantityInput) {
-            quantityInput.addEventListener('input', () => {
-                this.updatePaymentSection();
-            });
-        }
-        
-        if (sensorSelect) {
-            sensorSelect.addEventListener('change', () => {
-                this.updatePaymentSection();
-            });
-        }
+        // Product picker listeners are set up in populateSensorOptions()
     }
 
     applyDeliveryCycleLabel() {
@@ -204,14 +190,14 @@ class CGMOrderManager {
 
     validateField(field) {
         console.log('Validating field:', field.name, field.type, field.value);
-        
+
         const value = field.value.trim();
-        
+
         if (field.hasAttribute('required') && !value) {
             this.showFieldError(field, 'This field is required');
             return false;
         }
-        
+
         if (field.type === 'tel' && value) {
             const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
             if (!phoneRegex.test(value.replace(/\s/g, ''))) {
@@ -219,7 +205,7 @@ class CGMOrderManager {
                 return false;
             }
         }
-        
+
         if (field.type === 'number' && value) {
             const num = parseInt(value);
             if (num < 1 || num > 10) {
@@ -227,14 +213,14 @@ class CGMOrderManager {
                 return false;
             }
         }
-        
+
         if (field.type === 'file') {
             if (field.hasAttribute('required') && field.files.length === 0) {
                 this.showFieldError(field, 'Payment screenshot is required');
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -264,14 +250,14 @@ class CGMOrderManager {
         const form = document.getElementById('orderForm');
         const submitBtn = form.querySelector('.submit-btn');
         const formContainer = document.querySelector('.order-form-section');
-        
+
         if (!this.ordersEnabled) {
             form.style.opacity = '0.6';
             form.style.pointerEvents = 'none';
             submitBtn.textContent = 'Orders Disabled';
             submitBtn.style.background = '#e53e3e';
             formContainer.style.position = 'relative';
-            
+
             // Add disabled overlay
             let overlay = formContainer.querySelector('.disabled-overlay');
             if (!overlay) {
@@ -286,7 +272,7 @@ class CGMOrderManager {
             submitBtn.innerHTML = '<i class="ph-bold ph-paper-plane-right"></i> Submit Order';
             submitBtn.style.background = '';
             formContainer.style.position = '';
-            
+
             // Remove disabled overlay
             const overlay = formContainer.querySelector('.disabled-overlay');
             if (overlay) {
@@ -295,39 +281,40 @@ class CGMOrderManager {
         }
     }
 
+    getCartItems() {
+        const items = [];
+        Object.entries(CONFIG.SENSORS).forEach(([key, sensor]) => {
+            const input = document.getElementById(`qty-${key}`);
+            const qty = input ? (parseInt(input.value) || 0) : 0;
+            if (qty > 0) {
+                items.push({ key, name: sensor.name, qty, price: sensor.price, subtotal: qty * sensor.price, isSensor: sensor.isSensor !== false, savings: (sensor.savings || 0) * qty });
+            }
+        });
+        return items;
+    }
+
     updatePaymentSection() {
-        const quantityInput = document.getElementById('quantity');
         const paymentSection = document.getElementById('paymentSection');
         const totalAmountElement = document.getElementById('totalAmount');
         const savingsLine = document.getElementById('savingsLine');
         const savingsValue = document.getElementById('savingsValue');
-        
-        if (quantityInput && paymentSection && totalAmountElement) {
-            const quantity = parseInt(quantityInput.value) || 0;
-            
-            if (quantity > 0) {
-                const selectedSensor = document.getElementById('sensorType').value;
-                const sensorCfg = CONFIG.SENSORS[selectedSensor] || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR];
-                const sensorPrice = sensorCfg.price;
-                const perSensorSavings = sensorCfg.savings || 0;
-                const totalAmount = quantity * sensorPrice;
+
+        if (paymentSection && totalAmountElement) {
+            const items = this.getCartItems();
+            const totalAmount = items.reduce((sum, i) => sum + i.subtotal, 0);
+            const totalSavings = items.reduce((sum, i) => sum + i.savings, 0);
+
+            if (totalAmount > 0) {
                 totalAmountElement.textContent = `₹${totalAmount.toLocaleString()}`;
-                if (perSensorSavings > 0 && savingsLine && savingsValue) {
-                    const totalSavings = perSensorSavings * quantity;
+                if (totalSavings > 0 && savingsLine && savingsValue) {
                     savingsValue.textContent = `₹${totalSavings.toLocaleString()}`;
                     savingsLine.style.display = 'block';
                 } else if (savingsLine) {
                     savingsLine.style.display = 'none';
                 }
                 paymentSection.style.display = 'block';
-                
-                // Smooth scroll to payment section
-                setTimeout(() => {
-                    paymentSection.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
-                }, 300);
+
+
             } else {
                 paymentSection.style.display = 'none';
             }
@@ -342,16 +329,16 @@ class CGMOrderManager {
     showAdminControls() {
         const toggleContainer = document.getElementById('orderToggleContainer');
         const adminLoginBtn = document.getElementById('adminLoginBtn');
-        
+
         toggleContainer.style.display = 'block';
         adminLoginBtn.style.display = 'none';
-        
+
         // Add logout functionality
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'admin-btn';
         logoutBtn.innerHTML = '<i class="ph-bold ph-sign-out"></i> Logout';
         logoutBtn.addEventListener('click', () => this.hideAdminControls());
-        
+
         const adminLogin = document.querySelector('.admin-login');
         adminLogin.appendChild(logoutBtn);
     }
@@ -360,28 +347,61 @@ class CGMOrderManager {
         const toggleContainer = document.getElementById('orderToggleContainer');
         const adminLoginBtn = document.getElementById('adminLoginBtn');
         const logoutBtn = document.querySelector('.admin-btn:last-child');
-        
+
         toggleContainer.style.display = 'none';
         adminLoginBtn.style.display = 'flex';
-        
+
         if (logoutBtn) {
             logoutBtn.remove();
         }
     }
 
     populateSensorOptions() {
-        const sensorSelect = document.getElementById('sensorType');
-        if (!sensorSelect) return;
+        const picker = document.getElementById('productPicker');
+        if (!picker) return;
 
-        // Clear existing options except the first one
-        sensorSelect.innerHTML = '<option value="">Select sensor type</option>';
-        
-        // Add options from config
+        picker.innerHTML = '';
+
         Object.entries(CONFIG.SENSORS).forEach(([key, sensor]) => {
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = `${sensor.name} (₹${sensor.price.toLocaleString()}/-)`;
-            sensorSelect.appendChild(option);
+            const row = document.createElement('div');
+            row.className = 'product-row';
+            row.innerHTML = `
+                <div class="product-info">
+                    <span class="product-name">${sensor.name}</span>
+                    <span class="product-price">₹${sensor.price.toLocaleString()}/-</span>
+                </div>
+                <div class="qty-stepper">
+                    <button type="button" class="qty-btn qty-minus" data-key="${key}">−</button>
+                    <input type="number" id="qty-${key}" class="qty-input" value="0" min="0" max="99" data-key="${key}">
+                    <button type="button" class="qty-btn qty-plus" data-key="${key}">+</button>
+                </div>
+            `;
+            picker.appendChild(row);
+        });
+
+        // Attach stepper listeners
+        picker.querySelectorAll('.qty-minus').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(`qty-${btn.dataset.key}`);
+                const cur = parseInt(input.value) || 0;
+                if (cur > 0) input.value = cur - 1;
+                this.updatePaymentSection();
+            });
+        });
+
+        picker.querySelectorAll('.qty-plus').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(`qty-${btn.dataset.key}`);
+                const cur = parseInt(input.value) || 0;
+                input.value = cur + 1;
+                this.updatePaymentSection();
+            });
+        });
+
+        picker.querySelectorAll('.qty-input').forEach(input => {
+            input.addEventListener('input', () => {
+                this.updatePaymentSection();
+            });
         });
     }
 
@@ -391,7 +411,7 @@ class CGMOrderManager {
 
         // Clear existing options except the first one
         locationSelect.innerHTML = '<option value="">Select pickup location</option>';
-        
+
         // Add options from config
         Object.entries(CONFIG.PICKUP_LOCATIONS).forEach(([key, location]) => {
             const option = document.createElement('option');
@@ -408,7 +428,7 @@ class CGMOrderManager {
                 try {
                     // Convert file to base64
                     const base64Data = reader.result.split(',')[1];
-                    
+
                     // Prepare data for Google Apps Script
                     const uploadData = {
                         action: 'submitOrder',
@@ -420,7 +440,7 @@ class CGMOrderManager {
 
                     // Use Google Apps Script URL from config
                     const scriptUrl = CONFIG.GOOGLE_SCRIPT_URL;
-                    
+
                     const isProd = window.location.hostname.endsWith('github.io');
                     const fetchOptions = {
                         method: 'POST',
@@ -465,35 +485,46 @@ class CGMOrderManager {
 
     async handleFormSubmit(e) {
         e.preventDefault();
-        
+
         if (!this.ordersEnabled) {
             alert('Orders are currently disabled. Please try again later.');
             return;
         }
-        
+
         // Get the form element
         const form = document.getElementById('orderForm');
         const formData = new FormData(form);
         const orderData = Object.fromEntries(formData.entries());
-        
+
+        // Collect cart items
+        const items = this.getCartItems();
+        if (items.length === 0) {
+            alert('Please select at least one item.');
+            return;
+        }
+        orderData.items = items;
+        orderData.totalAmount = items.reduce((s, i) => s + i.subtotal, 0);
+        // Build a legacy-friendly sensorType + quantity for backend compatibility
+        orderData.sensorType = items.map(i => i.name).join(', ');
+        orderData.quantity = items.reduce((s, i) => s + i.qty, 0);
+
         // Validate all fields
         let isValid = true;
         const requiredFields = form.querySelectorAll('[required]');
-        
+
         requiredFields.forEach(field => {
             if (!this.validateField(field)) {
                 isValid = false;
             }
         });
-        
+
         // Validate payment screenshot (mandatory)
         const paymentScreenshot = document.getElementById('paymentScreenshot');
         if (!paymentScreenshot || (paymentScreenshot.files && paymentScreenshot.files.length === 0)) {
-            // If payment section is hidden (quantity=0), don't require screenshot
             const paymentSection = document.getElementById('paymentSection');
             if (paymentSection && paymentSection.style.display !== 'none') {
-                 this.showFieldError(paymentScreenshot, 'Payment screenshot is required');
-                 return;
+                this.showFieldError(paymentScreenshot, 'Payment screenshot is required');
+                return;
             }
         }
 
@@ -524,7 +555,6 @@ class CGMOrderManager {
             } catch (error) {
                 console.error('Upload failed:', error);
                 alert('Screenshot upload failed. Please retry.');
-                // Reset button state on failure
                 if (submitBtn) {
                     submitBtn.innerHTML = originalBtnText;
                     submitBtn.disabled = false;
@@ -532,25 +562,21 @@ class CGMOrderManager {
                 return;
             }
         }
-        
-        // Calculate total amount
-        const quantity = parseInt(orderData.quantity) || 0;
-        const sensorPrice = CONFIG.SENSORS[orderData.sensorType]?.price || CONFIG.SENSORS[CONFIG.DEFAULT_SENSOR].price;
-        orderData.totalAmount = quantity * sensorPrice;
-        
+
         // Add timestamp and ID
         orderData.id = Date.now();
         orderData.timestamp = new Date().toISOString();
         orderData.formattedTime = new Date().toLocaleString();
-        
+
         // Save order
         this.addOrder(orderData);
-        
+
         // Show success modal
         this.showSuccessModal(orderData);
-        
-        // Reset form and hide payment section
+
+        // Reset form and product picker quantities
         form.reset();
+        document.querySelectorAll('.qty-input').forEach(input => input.value = '0');
         this.updatePaymentSection();
 
         // Reset button state after success
@@ -580,15 +606,17 @@ class CGMOrderManager {
     showSuccessModal(orderData) {
         const modal = document.getElementById('successModal');
         const details = document.getElementById('orderDetails');
-        
+
         if (modal && details) {
-            const sensorName = this.getSensorTypeName(orderData.sensorType);
             const locationName = this.getPickupLocationName(orderData.pickupLocation);
-            
+            const items = orderData.items || [];
+            const itemsHtml = items.map(i => `<li>${i.name} × ${i.qty} — ₹${i.subtotal.toLocaleString()}</li>`).join('');
+
             details.innerHTML = `
                 <p><strong>Order ID:</strong> #${orderData.id.toString().slice(-6)}</p>
                 <p><strong>Name:</strong> ${orderData.name}</p>
-                <p><strong>Item:</strong> ${sensorName} (x${orderData.quantity})</p>
+                <p><strong>Items:</strong></p>
+                <ul style="margin: 0.5rem 0 0.5rem 1.25rem; list-style: disc;">${itemsHtml}</ul>
                 <p><strong>Amount Paid:</strong> ₹${orderData.totalAmount.toLocaleString()}</p>
                 <p><strong>Pickup:</strong> ${locationName}</p>
                 <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #e2e8f0;">
@@ -596,7 +624,7 @@ class CGMOrderManager {
                     Please keep this screenshot/ID for your reference.
                 </p>
             `;
-            
+
             modal.style.display = 'block';
         }
     }
@@ -614,15 +642,21 @@ class CGMOrderManager {
 
     updateSummary() {
         const totalOrders = this.orders.length;
-        const totalSensors = this.orders.reduce((sum, order) => sum + (parseInt(order.quantity) || 0), 0);
-        
+        // Count only sensors (isSensor: true), not patches
+        const totalSensors = this.orders.reduce((sum, order) => {
+            if (order.items && Array.isArray(order.items)) {
+                return sum + order.items.filter(i => i.isSensor !== false).reduce((s, i) => s + i.qty, 0);
+            }
+            return sum + (parseInt(order.quantity) || 0);
+        }, 0);
+
         const totalOrdersEl = document.getElementById('totalOrders');
         const totalSensorsEl = document.getElementById('totalSensors');
         const lastOrderTimeEl = document.getElementById('lastOrderTime');
-        
+
         if (totalOrdersEl) totalOrdersEl.textContent = totalOrders;
         if (totalSensorsEl) totalSensorsEl.textContent = totalSensors;
-        
+
         if (lastOrderTimeEl && this.orders.length > 0) {
             const lastOrder = this.orders[0];
             const lastOrderDate = new Date(lastOrder.timestamp);
@@ -637,13 +671,16 @@ class CGMOrderManager {
         // unless we want to show them before server fetch returns
         const container = document.getElementById('ordersList');
         if (!container) return;
-        
+
         if (this.orders.length === 0) {
             container.innerHTML = '<div class="no-orders">No orders yet. Be the first to order!</div>';
             return;
         }
 
         const html = this.orders.slice(0, 10).map(order => {
+            const itemsSummary = (order.items && Array.isArray(order.items))
+                ? order.items.map(i => `${i.name} ×${i.qty}`).join(', ')
+                : `${this.getSensorTypeName(order.sensorType)} (x${order.quantity})`;
             return `
                 <div class="order-item">
                     <div class="order-info">
@@ -651,18 +688,18 @@ class CGMOrderManager {
                         <div class="order-time">${this.getTimeAgo(new Date(order.timestamp))}</div>
                     </div>
                     <div class="order-details-text">
-                        ${this.getSensorTypeName(order.sensorType)} (x${order.quantity})
+                        ${itemsSummary}
                     </div>
                 </div>
             `;
         }).join('');
-        
+
         container.innerHTML = html;
     }
     getTimeAgo(date) {
         const now = new Date();
         const diffInSeconds = Math.floor((now - date) / 1000);
-        
+
         if (diffInSeconds < 60) return 'Just now';
         if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
         if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
@@ -701,12 +738,12 @@ class CGMOrderManager {
             order.emergencyContact || '',
             new Date(order.timestamp).toLocaleDateString()
         ]);
-        
+
         return [headers, ...rows]
             .map(row => row.map(cell => `"${cell}"`).join(','))
             .join('\n');
     }
-    
+
     async maybeFetchServerOrders() {
         if (!CONFIG.USE_SERVER_ORDERS) return;
         const isProd = window.location.hostname.endsWith('github.io');
@@ -729,7 +766,7 @@ class CGMOrderManager {
                 }));
                 this.renderServerOrders(mapped);
             }
-        } catch (_) {}
+        } catch (_) { }
     }
 
     renderServerOrders(serverOrders) {
@@ -741,16 +778,20 @@ class CGMOrderManager {
             // Format date to be shorter: "Nov 27, 9:26 AM"
             let placedAt = '';
             try {
-                placedAt = new Date(order.timestamp).toLocaleString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    hour: 'numeric', 
-                    minute: 'numeric', 
-                    hour12: true 
+                placedAt = new Date(order.timestamp).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true
                 });
             } catch (e) {
                 placedAt = new Date(order.timestamp).toLocaleString();
             }
+
+            const itemsSummary = (order.items && Array.isArray(order.items))
+                ? order.items.map(i => `${i.name} ×${i.qty}`).join(', ')
+                : `${sensorType} (x${order.quantity})`;
 
             return `
                 <div class="order-item">
@@ -759,7 +800,7 @@ class CGMOrderManager {
                         <div class="order-time">${placedAt}</div>
                     </div>
                     <div class="order-details-text">
-                        ${sensorType} (x${order.quantity})
+                        ${itemsSummary}
                     </div>
                 </div>
             `;
@@ -770,7 +811,7 @@ class CGMOrderManager {
     fetchRecentOrdersJsonp(limit) {
         const cbName = `__orders_cb_${Date.now()}`;
         const cleanup = () => {
-            try { delete window[cbName]; } catch (_) {}
+            try { delete window[cbName]; } catch (_) { }
             if (script && script.parentNode) script.parentNode.removeChild(script);
         };
         window[cbName] = (data) => {
@@ -810,7 +851,7 @@ class CGMOrderManager {
         try {
             const resp = await this.postToScript({ action: 'getSummary' });
             if (resp && resp.success) this.applyServerSummary(resp);
-        } catch (_) {}
+        } catch (_) { }
     }
 
     applyServerSummary(summary) {
@@ -828,7 +869,7 @@ class CGMOrderManager {
     fetchSummaryJsonp() {
         const cbName = `__summary_cb_${Date.now()}`;
         const cleanup = () => {
-            try { delete window[cbName]; } catch (_) {}
+            try { delete window[cbName]; } catch (_) { }
             if (script && script.parentNode) script.parentNode.removeChild(script);
         };
         window[cbName] = (data) => {
@@ -854,7 +895,7 @@ function copyUPI() {
         const originalText = copyBtn.innerHTML;
         copyBtn.innerHTML = '<i class="ph-bold ph-check"></i>';
         copyBtn.style.background = '#10b981';
-        
+
         setTimeout(() => {
             copyBtn.innerHTML = originalText;
             copyBtn.style.background = '';
@@ -875,24 +916,24 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove('scrolled');
         }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     // Trigger immediately in case page is already scrolled
     handleScroll();
 
     console.log('DOM loaded, initializing application...');
-    
+
     try {
         window.cgmOrderManager = new CGMOrderManager();
         console.log('CGMOrderManager initialized successfully');
-        
+
         // Add keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 window.cgmOrderManager.closeModal();
             }
         });
-        
+
         // Add some helpful tooltips and animations
         addHelpfulFeatures();
         console.log('Application setup completed');
@@ -904,27 +945,27 @@ document.addEventListener('DOMContentLoaded', () => {
 function addHelpfulFeatures() {
     // Add loading animation logic handled by handleFormSubmit
     // Removed the timeout-based reset that was here previously to prevent early reset
-    
+
     // Add hover effects to stat cards
     const statCards = document.querySelectorAll('.stat-card');
     statCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
+        card.addEventListener('mouseenter', function () {
             this.style.transform = 'translateY(-5px) scale(1.02)';
         });
-        
-        card.addEventListener('mouseleave', function() {
+
+        card.addEventListener('mouseleave', function () {
             this.style.transform = 'translateY(0) scale(1)';
         });
     });
-    
+
     // Add form field focus effects
     const formFields = document.querySelectorAll('input, select, textarea');
     formFields.forEach(field => {
-        field.addEventListener('focus', function() {
+        field.addEventListener('focus', function () {
             this.parentNode.style.transform = 'translateX(5px)';
         });
-        
-        field.addEventListener('blur', function() {
+
+        field.addEventListener('blur', function () {
             this.parentNode.style.transform = 'translateX(0)';
         });
     });

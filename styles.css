@@ -474,6 +474,104 @@ section { margin-bottom: 2.5rem; }
     transform: translateY(0);
 }
 
+/* Product Picker */
+.product-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.7);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.product-row:hover {
+    background: white;
+    border-color: var(--primary-light);
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.product-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.product-price {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.qty-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    user-select: none;
+}
+
+.qty-btn:hover {
+    background: var(--primary-light);
+}
+
+.qty-btn:active {
+    background: var(--primary);
+    color: white;
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+    padding: 0.4rem 0;
+    background: transparent;
+    -moz-appearance: textfield;
+    outline: none;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* Payment Section */
 .payment-section {
     background: rgba(255,255,255,0.5);
