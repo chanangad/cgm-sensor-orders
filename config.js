@@ -35,13 +35,13 @@ const CONFIG = {
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3125,
+            price: 3150,
             savings: 975,
             isSensor: true
         },
         'vitatok': {
             name: 'VitaTok',
-            price: 3025,
+            price: 3050,
             savings: 1075,
             isSensor: true
         },
