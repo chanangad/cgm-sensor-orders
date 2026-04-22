@@ -4,14 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'March 2026',
+    DELIVERY_CYCLE: 'May 2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '15th',
+    NEXT_RUN_DATE: '17th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: '1st March \'26',
+    ORDER_CLOSES_DATE: '4th May \'26',
 
     // Maximum order amount allowed in INR
     MAX_ORDER_AMOUNT: 25000,
@@ -35,13 +35,13 @@ const CONFIG = {
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3325,
+            price: 3125,
             savings: 975,
             isSensor: true
         },
         'vitatok': {
             name: 'VitaTok',
-            price: 3225,
+            price: 3025,
             savings: 1075,
             isSensor: true
         },
