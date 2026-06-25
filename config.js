@@ -4,14 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'May 2026',
+    DELIVERY_CYCLE: 'July 2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '16th',
+    NEXT_RUN_DATE: '12th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: '4th May \'26',
+    ORDER_CLOSES_DATE: '4th July \'26',
 
     // Maximum order amount allowed in INR
     MAX_ORDER_AMOUNT: 25000,
@@ -25,24 +25,25 @@ const CONFIG = {
     GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwXtTeXLz_8O-ZfraWmgCRgfkjxC1Yk2jBDj-vaCsee4VYxjc0ZIVb97ObzJbhch0FC/exec',
 
     // UPI ID for payment
-    UPI_ID: 'chanangad-1@okicici',
+    // UPI_ID: 'chanangad-1@okicici',
+    UPI_ID: 'anirudh.talakanti-2@okaxis',
 
     // UPI Recipient Name (for verification - used in backend)
-    UPI_RECIPIENT_NAME: 'Angad Chandhok',
-
+    // UPI_RECIPIENT_NAME: 'Angad Chandhok',
+    UPI_RECIPIENT_NAME: 'Anirudh Talakanti',
     // Sensor configuration - customize these as needed
     // Products available for ordering
     SENSORS: {
         'linx': {
             name: 'Linx',
-            price: 3150,
-            savings: 975,
+            price: 3025,
+            savings: 1075,
             isSensor: true
         },
         'vitatok': {
             name: 'VitaTok',
-            price: 3050,
-            savings: 1075,
+            price: 2925,
+            savings: 1175,
             isSensor: true
         },
         'patch': {
