@@ -444,7 +444,7 @@ class CGMOrderManager {
                 totalAmountElement.textContent = `₹${totalAmount.toLocaleString()}`;
                 if (totalSavings > 0 && savingsLine && savingsValue) {
                     savingsValue.textContent = `₹${totalSavings.toLocaleString()}`;
-                    savingsLine.style.display = 'block';
+                    savingsLine.style.display = 'inline-block';
                 } else if (savingsLine) {
                     savingsLine.style.display = 'none';
                 }
@@ -1150,30 +1150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function addHelpfulFeatures() {
-    // Add loading animation logic handled by handleFormSubmit
-    // Removed the timeout-based reset that was here previously to prevent early reset
-
-    // Add hover effects to stat cards
-    const statCards = document.querySelectorAll('.stat-card');
-    statCards.forEach(card => {
-        card.addEventListener('mouseenter', function () {
-            this.style.transform = 'translateY(-5px) scale(1.02)';
-        });
-
-        card.addEventListener('mouseleave', function () {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-
-    // Add form field focus effects
-    const formFields = document.querySelectorAll('input, select, textarea');
-    formFields.forEach(field => {
-        field.addEventListener('focus', function () {
-            this.parentNode.style.transform = 'translateX(5px)';
-        });
-
-        field.addEventListener('blur', function () {
-            this.parentNode.style.transform = 'translateX(0)';
-        });
-    });
+    // Hover and focus treatments live in styles.css. They used to be applied
+    // here as inline transforms, which shifted each field 5px sideways on
+    // focus and fought the focus ring.
 }
