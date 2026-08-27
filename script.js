@@ -894,12 +894,18 @@ class CGMOrderManager {
             });
     }
 
+    // Matches a product name from the sheet back to its config entry.
+    findSensorByName(name) {
+        const sensors = CONFIG.SENSORS || {};
+        const key = Object.keys(sensors).find(k => sensors[k].name === name);
+        return key ? sensors[key] : null;
+    }
+
     // 'Linx/VitaTok Patch' is accurate but unreadable in a list; config.js can
     // give any product a shorter label for this one purpose.
     shortItemLabel(name) {
-        const sensors = CONFIG.SENSORS || {};
-        const key = Object.keys(sensors).find(k => sensors[k].name === name);
-        return key ? (sensors[key].shortName || sensors[key].name) : name;
+        const sensor = this.findSensorByName(name);
+        return sensor ? (sensor.shortName || sensor.name) : name;
     }
 
     renderItemChips(items, fallbackQty) {
@@ -909,9 +915,14 @@ class CGMOrderManager {
             items = [{ name: items[0].name, qty: Number(fallbackQty) }];
         }
         return items.map(i => {
+            const sensor = this.findSensorByName(i.name);
+            // Accessories (patches) are played down so the sensors read first.
+            // An unrecognised product is treated as a sensor rather than hidden.
+            const accessory = sensor ? sensor.isSensor === false : false;
+            const cls = accessory ? 'order-chip order-chip--accessory' : 'order-chip';
             const label = escapeHtml(this.shortItemLabel(i.name));
             const qty = i.qty ? `<span class="order-chip-qty">×${escapeHtml(i.qty)}</span>` : '';
-            return `<span class="order-chip">${label}${qty}</span>`;
+            return `<span class="${cls}">${label}${qty}</span>`;
         }).join('');
     }
 
