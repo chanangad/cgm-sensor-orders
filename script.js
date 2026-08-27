@@ -391,7 +391,7 @@ class CGMOrderManager {
             form.style.opacity = '0.6';
             form.style.pointerEvents = 'none';
             submitBtn.textContent = 'Orders Disabled';
-            submitBtn.style.background = '#e53e3e';
+            submitBtn.style.background = 'var(--danger)';
             formContainer.style.position = 'relative';
 
             // Add disabled overlay
