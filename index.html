@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CGM Sensor Pre‑Order – Diabuddies of Karnataka</title>
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="styles.css?v=8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
@@ -139,18 +139,22 @@
                                 <div class="upi-info">
                                     <h4><i class="ph-fill ph-device-mobile-camera"></i> UPI Payment</h4>
                                     <div class="upi-id">
+                                        <span class="upi-label">Paying:</span>
+                                        <span class="upi-value" id="upiPayeeName"></span>
+                                    </div>
+                                    <div class="upi-id" id="upiIdRow">
                                         <span class="upi-label">UPI ID:</span>
-                                        <span class="upi-value">anirudh.talakanti-2@okaxis</span>
+                                        <span class="upi-value" id="upiValue"></span>
                                         <button type="button" class="copy-btn" onclick="copyUPI()">
                                             <i class="ph-bold ph-copy"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div class="qr-section">
+                                <div class="qr-section" id="qrSection">
                                     <h4><i class="ph-fill ph-qr-code"></i> Scan QR Code</h4>
                                     <div class="qr-container">
-                                        <img src="ani.png" alt="UPI QR Code" class="qr-code">
+                                        <img src="ani.png" alt="UPI QR Code" class="qr-code" id="upiQrImage">
                                     </div>
                                 </div>
                             </div>
@@ -263,7 +267,7 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2025 Angad Chandhok. Made with ❤️ for our diabetes community.</p>
+        <p>&copy; <span id="footerYear">2025</span> Angad Chandhok. Made with ❤️ for our diabetes community.</p>
     </footer>
 
     <!-- Success Modal -->
@@ -295,8 +299,8 @@
             <span></span>
         </div>
     </a>
-    <script src="config.js?v=1"></script>
-    <script src="script.js?v=8"></script>
+    <script src="config.js?v=4"></script>
+    <script src="script.js?v=11"></script>
 </body>
 
 </html>
