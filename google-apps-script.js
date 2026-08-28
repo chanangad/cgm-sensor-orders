@@ -14,7 +14,10 @@ var HEADERS = [
     'Timestamp', 'Name', 'Parent/Guardian', 'Phone', 'Email',
     'Items Summary', 'Linx Qty', 'VitaTok Qty', 'Patch Qty',
     'Total Sensors', 'Pickup', 'Total Amount', 'Payment Proof URL',
-    'Transaction ID', 'Order ID', 'Flags', 'Screenshot Hash', 'Verification', 'Payee'
+    'Transaction ID', 'Order ID', 'Flags', 'Screenshot Hash', 'Verification', 'Payee',
+    // One column per check, each holding a short value so the sheet's filter
+    // dropdowns stay usable. The readable sentence lives in the last column.
+    'Amount Check', 'Payee Check', 'Date Check', 'Duplicate Of', 'Verification Notes'
 ];
 // Columns 7-9 hold per-item quantities. Names match CONFIG.SENSORS in config.js
 // so the page can shorten them for display.
@@ -28,6 +31,8 @@ var COL_ORDER_ID = 15;
 var COL_SCREENSHOT_HASH = 17;
 var COL_VERIFICATION = 18;
 var COL_PAYEE = 19;
+var COL_AMOUNT_CHECK = 20;      // first of the contiguous per-check block
+var COL_CHECK_BLOCK_WIDTH = 5;  // Amount, Payee, Date, Duplicate Of, Notes
 
 // Keep in sync with CONFIG.SENSORS in config.js. Used only to sanity-check the
 // amount the browser reports; items with an unknown key are skipped.
@@ -37,7 +42,7 @@ var PRICES = { linx: 3025, vitatok: 2925, patch: 30 };
 // be confirmed from outside with one request, instead of guessing whether the
 // editor's Save actually reached the /exec URL:
 //   curl -sL '<web app url>' -> {"build":"..."}
-var BUILD = '2026-08-28-drive-export';
+var BUILD = '2026-08-28-check-columns';
 
 // Guard rails for a public endpoint
 var MAX_SUBMISSIONS_PER_MINUTE = 20;
@@ -420,28 +425,38 @@ function checkOrder_(orderId) {
 var MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
 
 function verifyScreenshotForRow_(sheet, row, data, order, duplicateHashRow) {
+    var dupOf = duplicateHashRow ? ('ROW ' + duplicateHashRow) : '';
     var ocr = ocrImageText_(data);
 
     if (!ocr.ok) {
         // Say why, so the sheet itself explains what to fix rather than
         // showing one unexplained string for every possible cause.
-        var note = 'OCR UNAVAILABLE — ' + ocr.reason;
-        setCell_(sheet, row, COL_VERIFICATION, duplicateHashRow
-            ? 'REVIEW: same screenshot as row ' + duplicateHashRow + ' (' + note + ')'
-            : note);
+        writeChecks_(sheet, row, {
+            status: 'OCR UNAVAILABLE',
+            amount: '', payee: '', date: '', duplicateOf: dupOf,
+            notes: 'OCR unavailable — ' + ocr.reason +
+                (duplicateHashRow ? '; same screenshot as row ' + duplicateHashRow : '')
+        });
         return;
     }
-    var text = ocr.text;
 
     // Only a name from PAYEES is ever trusted as the expected payee; an order
     // naming anything else is flagged rather than checked against what it claims.
     var payee = resolvePayee_(order);
-    var result = analysePaymentText_(text, expectedAmountFor_(order), payee.known ? payee.name : '', new Date());
+    var result = analysePaymentText_(ocr.text, expectedAmountFor_(order), payee.known ? payee.name : '', new Date());
+
     var problems = result.problems.slice();
     if (!payee.known) problems.unshift('order named an unrecognised payee (' + (payee.claimed || 'none') + ')');
     if (duplicateHashRow) problems.unshift('same screenshot as row ' + duplicateHashRow);
 
-    setCell_(sheet, row, COL_VERIFICATION, problems.length ? 'REVIEW: ' + problems.join('; ') : 'OK');
+    writeChecks_(sheet, row, {
+        status: problems.length ? 'REVIEW' : 'OK',
+        amount: result.amount,
+        payee: payee.known ? result.payee : 'UNKNOWN PAYEE',
+        date: result.date,
+        duplicateOf: dupOf,
+        notes: problems.length ? problems.join('; ') : 'All checks passed'
+    });
 
     // The Transaction ID column has never been filled by the form — the payment
     // reference read off the screenshot is exactly what belongs there.
@@ -450,6 +465,14 @@ function verifyScreenshotForRow_(sheet, row, data, order, duplicateHashRow) {
     }
 
     debugLog_('Row ' + row + ' verification: ' + (problems.length ? problems.join('; ') : 'OK'));
+}
+
+// Overall status sits apart from the per-check block, so it takes two writes.
+function writeChecks_(sheet, row, r) {
+    setCell_(sheet, row, COL_VERIFICATION, r.status);
+    sheet.getRange(row, COL_AMOUNT_CHECK, 1, COL_CHECK_BLOCK_WIDTH).setValues([[
+        r.amount || '', r.payee || '', r.date || '', r.duplicateOf || '', r.notes || ''
+    ]]);
 }
 
 // Which coordinator an order says it was paid to. `known` is false unless the
@@ -558,8 +581,16 @@ function analysePaymentText_(text, expectedAmount, payeeName, now) {
     var lower = flat.toLowerCase();
 
     if (!flat) {
-        return { problems: ['screenshot text could not be read'], reference: '', text: '' };
+        return {
+            problems: ['screenshot text could not be read'],
+            amount: 'NOT FOUND', payee: 'NOT FOUND', date: '',
+            reference: '', text: ''
+        };
     }
+
+    var amountStatus = '';
+    var payeeStatus = '';
+    var dateStatus = '';
 
     // --- amount ---
     if (expectedAmount > 0) {
@@ -569,10 +600,14 @@ function analysePaymentText_(text, expectedAmount, payeeName, now) {
         for (var i = 0; i < candidates.length; i++) {
             if (Math.abs(candidates[i] - expectedAmount) < 0.5) { matched = true; break; }
         }
-        if (!matched) {
-            problems.push(amounts.currency.length
-                ? 'amount mismatch (expected ' + expectedAmount + ', screenshot shows ' + amounts.currency.slice(0, 3).join(' / ') + ')'
-                : 'amount ' + expectedAmount + ' not found on screenshot');
+        if (matched) {
+            amountStatus = 'OK';
+        } else if (amounts.currency.length) {
+            amountStatus = 'MISMATCH';
+            problems.push('amount mismatch (expected ' + expectedAmount + ', screenshot shows ' + amounts.currency.slice(0, 3).join(' / ') + ')');
+        } else {
+            amountStatus = 'NOT FOUND';
+            problems.push('amount ' + expectedAmount + ' not found on screenshot');
         }
     }
 
@@ -582,19 +617,42 @@ function analysePaymentText_(text, expectedAmount, payeeName, now) {
         var letters = lower.replace(/[^a-z]+/g, ' ');
         var hits = 0;
         tokens.forEach(function (t) { if (letters.indexOf(t) !== -1) hits++; });
-        if (hits === 0) problems.push('payee "' + payeeName + '" not found');
-        else if (hits < tokens.length) problems.push('payee name only partly matched');
+        if (hits === 0) {
+            payeeStatus = 'NOT FOUND';
+            problems.push('payee "' + payeeName + '" not found');
+        } else if (hits < tokens.length) {
+            payeeStatus = 'PARTIAL';
+            problems.push('payee name only partly matched');
+        } else {
+            payeeStatus = 'OK';
+        }
     }
 
     // --- date: catches an old screenshot being reused ---
     var when = extractDate_(lower, now);
     if (when) {
         var ageDays = Math.floor((now.getTime() - when.getTime()) / 86400000);
-        if (ageDays > SCREENSHOT_MAX_AGE_DAYS) problems.push('screenshot dated ' + ageDays + ' days ago');
-        else if (ageDays < -1) problems.push('screenshot dated in the future');
+        if (ageDays > SCREENSHOT_MAX_AGE_DAYS) {
+            dateStatus = 'TOO OLD';
+            problems.push('screenshot dated ' + ageDays + ' days ago');
+        } else if (ageDays < -1) {
+            dateStatus = 'FUTURE';
+            problems.push('screenshot dated in the future');
+        } else {
+            dateStatus = 'OK';
+        }
+    } else {
+        dateStatus = 'NO DATE';
     }
 
-    return { problems: problems, reference: extractReference_(flat), text: flat };
+    return {
+        problems: problems,
+        amount: amountStatus,
+        payee: payeeStatus,
+        date: dateStatus,
+        reference: extractReference_(flat),
+        text: flat
+    };
 }
 
 function extractAmounts_(text) {
