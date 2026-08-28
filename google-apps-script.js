@@ -414,14 +414,18 @@ function checkOrder_(orderId) {
 var MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
 
 function verifyScreenshotForRow_(sheet, row, data, order, duplicateHashRow) {
-    var text = ocrImageText_(data);
+    var ocr = ocrImageText_(data);
 
-    if (text === null) {
+    if (!ocr.ok) {
+        // Say why, so the sheet itself explains what to fix rather than
+        // showing one unexplained string for every possible cause.
+        var note = 'OCR UNAVAILABLE — ' + ocr.reason;
         setCell_(sheet, row, COL_VERIFICATION, duplicateHashRow
-            ? 'REVIEW: same screenshot as row ' + duplicateHashRow + ' (OCR unavailable)'
-            : 'OCR UNAVAILABLE');
+            ? 'REVIEW: same screenshot as row ' + duplicateHashRow + ' (' + note + ')'
+            : note);
         return;
     }
+    var text = ocr.text;
 
     // Only a name from PAYEES is ever trusted as the expected payee; an order
     // naming anything else is flagged rather than checked against what it claims.
@@ -470,26 +474,51 @@ function expectedAmountFor_(order) {
 }
 
 // Imports the image as a Google Doc so Drive OCRs it, reads the text back, then
-// throws the temporary doc away. Returns null when OCR is unavailable.
+// throws the temporary doc away.
+//
+// Works with either version of the Advanced Drive Service, because the Services
+// panel may add v2 or v3 and their signatures differ: v3 is Files.create with a
+// `name`, v2 is Files.insert with a `title` and an explicit ocr flag.
+//
+// Returns { ok: true, text } or { ok: false, reason }.
 function ocrImageText_(data) {
     if (typeof Drive === 'undefined' || !Drive.Files) {
         debugLog_('Advanced Drive Service not enabled — skipping OCR');
-        return null;
+        return { ok: false, reason: 'add Drive API under Services in the Apps Script editor' };
     }
+
     var docId = '';
     try {
         var bytes = Utilities.base64Decode(data.screenshot);
         var blob = Utilities.newBlob(bytes, data.mimeType || 'image/png', data.filename || 'screenshot.png');
-        var created = Drive.Files.create(
-            { name: 'ocr-temp-' + new Date().getTime(), mimeType: 'application/vnd.google-apps.document' },
-            blob,
-            { ocrLanguage: 'en' }
-        );
+        var tempName = 'ocr-temp-' + new Date().getTime();
+        var created;
+
+        if (typeof Drive.Files.create === 'function') {
+            created = Drive.Files.create(
+                { name: tempName, mimeType: 'application/vnd.google-apps.document' },
+                blob,
+                { ocrLanguage: 'en' }
+            );
+            debugLog_('OCR via Drive v3');
+        } else if (typeof Drive.Files.insert === 'function') {
+            created = Drive.Files.insert(
+                { title: tempName, mimeType: 'application/vnd.google-apps.document' },
+                blob,
+                { ocr: true, ocrLanguage: 'en' }
+            );
+            debugLog_('OCR via Drive v2');
+        } else {
+            return { ok: false, reason: 'Drive service has neither Files.create nor Files.insert' };
+        }
+
         docId = created.id || (created.getId && created.getId());
-        return DocumentApp.openById(docId).getBody().getText();
+        if (!docId) return { ok: false, reason: 'Drive returned no document id' };
+
+        return { ok: true, text: DocumentApp.openById(docId).getBody().getText() };
     } catch (e) {
         debugLog_('OCR failed: ' + e);
-        return null;
+        return { ok: false, reason: String(e).slice(0, 120) };
     } finally {
         if (docId) {
             try { Drive.Files.remove(docId); }
