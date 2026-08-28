@@ -515,7 +515,7 @@ function ocrImageText_(data) {
         docId = created.id || (created.getId && created.getId());
         if (!docId) return { ok: false, reason: 'Drive returned no document id' };
 
-        return { ok: true, text: DocumentApp.openById(docId).getBody().getText() };
+        return { ok: true, text: readDocText_(docId) };
     } catch (e) {
         debugLog_('OCR failed: ' + e);
         return { ok: false, reason: String(e).slice(0, 120) };
@@ -525,6 +525,24 @@ function ocrImageText_(data) {
             catch (_) { try { DriveApp.getFileById(docId).setTrashed(true); } catch (__) { } }
         }
     }
+}
+
+// Reads the OCR'd document as plain text.
+//
+// Deliberately avoids DocumentApp.openById, which would require the
+// https://www.googleapis.com/auth/documents scope on top of everything else
+// this script already asks for. Exporting through the Drive API reuses the
+// Drive access the screenshot upload already needs, so enabling verification
+// does not force everyone to re-authorise the web app.
+function readDocText_(docId) {
+    var url = 'https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(docId) + '/export?mimeType=text/plain';
+    var resp = UrlFetchApp.fetch(url, {
+        headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+        muteHttpExceptions: true
+    });
+    var code = resp.getResponseCode();
+    if (code !== 200) throw new Error('Drive export returned HTTP ' + code);
+    return resp.getContentText();
 }
 
 // Pure text analysis, so it can be reasoned about (and tested) on its own.
