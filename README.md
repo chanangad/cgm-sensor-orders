@@ -74,14 +74,16 @@ shown on the page, the UPI ID, the copy button, the QR image and the name
 checked against payment screenshots all follow from that one line.
 
 ```js
-ACTIVE_PAYEE: 'anirudh',
+ACTIVE_PAYEE: 'coordinator-a',
 
 PAYEES: {
-    'anirudh': { name: 'Anirudh Talakanti', upiId: 'anirudh...@okaxis', qrImage: 'ani.png' },
-    'angad':   { name: 'Angad Chandhok',    upiId: 'chanangad-1@okicici', qrImage: 'angad.png' },
+    'coordinator-a': { name: 'Full Name', upiId: 'someone@bank', qrImage: 'a.png' },
+    'coordinator-b': { name: 'Full Name', upiId: '',             qrImage: 'b.png' },
     ...
 }
 ```
+
+(The real names, UPI IDs and QR files are in `config.js`.)
 
 A payee needs a name **plus at least one of** a UPI ID or a QR image. With only
 a QR the page shows the QR alone. With neither, the page refuses to show
@@ -227,7 +229,7 @@ Turn the whole thing off with `VERIFY_SCREENSHOTS = false` in the Apps Script.
 | `SCREENSHOT_MAX_AGE_DAYS` | `10` | Older screenshots get `TOO OLD` |
 | `MAX_SUBMISSIONS_PER_MINUTE` | `20` | Throttle on the public endpoint |
 | `MAX_SCREENSHOT_BYTES` | `10 MB` | Larger uploads are rejected |
-| `DEFAULT_PAYEE_KEY` | `anirudh` | Used only for orders from a cached old page |
+| `DEFAULT_PAYEE_KEY` | a `PAYEES` key | Used only for orders from a cached old page |
 | `BUILD` | date string | Echoed by the web app so a deploy can be confirmed |
 
 ---
