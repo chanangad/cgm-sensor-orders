@@ -33,6 +33,12 @@ var COL_PAYEE = 19;
 // amount the browser reports; items with an unknown key are skipped.
 var PRICES = { linx: 3025, vitatok: 2925, patch: 30 };
 
+// Bump when you change this file. It is echoed by the web app so a deploy can
+// be confirmed from outside with one request, instead of guessing whether the
+// editor's Save actually reached the /exec URL:
+//   curl -sL '<web app url>' -> {"build":"..."}
+var BUILD = '2026-08-28-drive-export';
+
 // Guard rails for a public endpoint
 var MAX_SUBMISSIONS_PER_MINUTE = 20;
 var MAX_SCREENSHOT_BYTES = 10 * 1024 * 1024;
@@ -753,7 +759,7 @@ function escapeHtml_(value) {
 function handleAdminAction_(data) {
     var props = PropertiesService.getScriptProperties();
     if (data.action === 'getStatus') {
-        return json_({ success: true, ordersEnabled: ordersEnabled_() });
+        return json_({ success: true, ordersEnabled: ordersEnabled_(), build: BUILD });
     }
     if (data.action === 'toggleOrders') {
         var pass = String(data.password || '');
@@ -784,7 +790,7 @@ function doGet(e) {
         if (p.action === 'checkOrder') {
             return respond_(checkOrder_(p.orderId), callback);
         }
-        return respond_(json_({ success: true, message: 'OK', timestamp: new Date().toISOString() }), callback);
+        return respond_(json_({ success: true, message: 'OK', build: BUILD, timestamp: new Date().toISOString() }), callback);
     } finally {
         flushDebugLog_();
     }
