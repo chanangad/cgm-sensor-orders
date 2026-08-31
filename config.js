@@ -29,7 +29,7 @@ const CONFIG = {
     // on the page, the ID the copy button copies, the QR code displayed, and the
     // payee name checked against payment screenshots all follow from it.
     // Nothing else needs editing to switch coordinators.
-    ACTIVE_PAYEE: 'anirudh',
+    ACTIVE_PAYEE: 'angad',
 
     PAYEES: {
         'anirudh': {
