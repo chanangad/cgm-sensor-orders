@@ -11,7 +11,7 @@ const CONFIG = {
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: 'Sunday 6th September, 12pm',
+    ORDER_CLOSES_DATE: 'Thursday 10th September, 12pm',
 
     // Maximum order amount allowed in INR
     MAX_ORDER_AMOUNT: 25000,
