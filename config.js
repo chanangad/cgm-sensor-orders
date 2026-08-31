@@ -4,14 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'July 2026',
+    DELIVERY_CYCLE: 'September 2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '12th',
+    NEXT_RUN_DATE: '20th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: '4th July \'26',
+    ORDER_CLOSES_DATE: 'Sunday 6th September, 12pm',
 
     // Maximum order amount allowed in INR
     MAX_ORDER_AMOUNT: 25000,
