@@ -52,7 +52,7 @@ const CONFIG = {
         'nithin': {
             name: 'Nithin Somasundar',
             upiId: 'nithin5577@okhdfcbank',
-            qrImage: ''             // TODO: add Nithin's QR image so it shows alongside the id
+            qrImage: 'nithin.png'
         }
     },
     // Sensor configuration - customize these as needed
