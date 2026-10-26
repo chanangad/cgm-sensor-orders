@@ -4,14 +4,14 @@
 const CONFIG = {
     // Optional delivery cycle label shown next to title, e.g., 'September 2025'
     // Leave empty to auto-use current Month Year
-    DELIVERY_CYCLE: 'September 2026',
+    DELIVERY_CYCLE: 'November 2026',
     // Optional specific date for the next run (used only in the header meta)
     // Example: '14th'
-    NEXT_RUN_DATE: '20th',
+    NEXT_RUN_DATE: '15th',
 
     // Optional: show an "orders close" date under the header meta
     // Example: '7th September 2025'
-    ORDER_CLOSES_DATE: 'Thursday 10th September, 12pm',
+    ORDER_CLOSES_DATE: 'Saturday 7th November, 12pm',
 
     // Maximum order amount allowed in INR
     MAX_ORDER_AMOUNT: 25000,
@@ -29,7 +29,7 @@ const CONFIG = {
     // on the page, the ID the copy button copies, the QR code displayed, and the
     // payee name checked against payment screenshots all follow from it.
     // Nothing else needs editing to switch coordinators.
-    ACTIVE_PAYEE: 'angad',
+    ACTIVE_PAYEE: 'nithin',
 
     PAYEES: {
         'anirudh': {
@@ -51,9 +51,8 @@ const CONFIG = {
         },
         'nithin': {
             name: 'Nithin Somasundar',
-            upiId: '',              // TODO: add Nithin's UPI ID
-            qrImage: ''             // TODO: add Nithin's QR image to the repo
-            // Not selectable until one of the two above is filled in.
+            upiId: 'nithin5577@okhdfcbank',
+            qrImage: ''             // TODO: add Nithin's QR image so it shows alongside the id
         }
     },
     // Sensor configuration - customize these as needed

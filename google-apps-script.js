@@ -42,7 +42,7 @@ var PRICES = { linx: 3025, vitatok: 2925, patch: 30 };
 // be confirmed from outside with one request, instead of guessing whether the
 // editor's Save actually reached the /exec URL:
 //   curl -sL '<web app url>' -> {"build":"..."}
-var BUILD = '2026-08-28-check-columns';
+var BUILD = '2026-10-26-nov-run';
 
 // Guard rails for a public endpoint
 var MAX_SUBMISSIONS_PER_MINUTE = 20;
@@ -70,7 +70,7 @@ var PAYEES = {
 };
 // Used only for orders that name no payee at all (a browser on a cached copy of
 // the old script). Keep it equal to CONFIG.ACTIVE_PAYEE in config.js.
-var DEFAULT_PAYEE_KEY = 'anirudh';
+var DEFAULT_PAYEE_KEY = 'nithin';
 // A screenshot dated more than this many days ago is worth a second look.
 var SCREENSHOT_MAX_AGE_DAYS = 10;
 
